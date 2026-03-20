@@ -156,7 +156,7 @@ export default function BillingPage() {
           <DialogContent>
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Patient
                   </Typography>
@@ -164,7 +164,7 @@ export default function BillingPage() {
                     {getPatientName(viewingInvoice.patientId)}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Invoice Date
                   </Typography>
@@ -172,7 +172,7 @@ export default function BillingPage() {
                     {new Date(viewingInvoice.createdAt).toLocaleDateString()}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Status
                   </Typography>
@@ -183,10 +183,10 @@ export default function BillingPage() {
                       viewingInvoice.status === 'PAID' ? 'success' :
                       viewingInvoice.status === 'PARTIAL' ? 'warning' :
                       viewingInvoice.status === 'DUE' ? 'error' : 'default'
-                    } as any
+                    }
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Insurance Provider
                   </Typography>

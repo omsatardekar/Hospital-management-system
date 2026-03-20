@@ -28,6 +28,8 @@ export function UserForm({ open, user, onClose, onSubmit }: UserFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
+    password: '',
     role: 'ADMIN' as Role,
     status: 'ACTIVE' as 'ACTIVE' | 'SUSPENDED',
   })
@@ -39,6 +41,8 @@ export function UserForm({ open, user, onClose, onSubmit }: UserFormProps) {
       setFormData({
         name: user.name,
         email: user.email,
+        phone: '',
+        password: '',
         role: user.role,
         status: user.status,
       })
@@ -46,6 +50,8 @@ export function UserForm({ open, user, onClose, onSubmit }: UserFormProps) {
       setFormData({
         name: '',
         email: '',
+        phone: '',
+        password: '',
         role: 'ADMIN',
         status: 'ACTIVE',
       })
@@ -61,6 +67,9 @@ export function UserForm({ open, user, onClose, onSubmit }: UserFormProps) {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Valid email is required'
     }
+    if (!user && !formData.password.trim()) {
+      newErrors.password = 'Password is required for new users'
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -72,6 +81,7 @@ export function UserForm({ open, user, onClose, onSubmit }: UserFormProps) {
     onSubmit({
       name: formData.name,
       email: formData.email,
+      phone: formData.phone,
       role: formData.role,
       status: formData.status,
     })
@@ -139,6 +149,30 @@ export function UserForm({ open, user, onClose, onSubmit }: UserFormProps) {
               sx={{ mb: 3 }}
               required
             />
+
+            <TextField
+              fullWidth
+              label="Phone Number"
+              type="tel"
+              value={formData.phone}
+              onChange={(e) => handleChange('phone', e.target.value)}
+              placeholder="+1 (555) 123-4567"
+              sx={{ mb: 3 }}
+            />
+
+            {!user && (
+              <TextField
+                fullWidth
+                label="Password"
+                type="password"
+                value={formData.password}
+                onChange={(e) => handleChange('password', e.target.value)}
+                error={!!errors.password}
+                helperText={errors.password || 'Required for new users'}
+                sx={{ mb: 3 }}
+                required={!user}
+              />
+            )}
 
             <FormControl fullWidth sx={{ mb: 3 }} required>
               <InputLabel>Role</InputLabel>

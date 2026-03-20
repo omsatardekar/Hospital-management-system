@@ -145,7 +145,7 @@ export function DoctorForm({ open, doctor, onClose, onSubmit }: DoctorFormProps)
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Full Name"
@@ -156,7 +156,7 @@ export function DoctorForm({ open, doctor, onClose, onSubmit }: DoctorFormProps)
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Email"
@@ -168,7 +168,7 @@ export function DoctorForm({ open, doctor, onClose, onSubmit }: DoctorFormProps)
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -179,7 +179,7 @@ export function DoctorForm({ open, doctor, onClose, onSubmit }: DoctorFormProps)
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Specialization</InputLabel>
                   <Select
@@ -200,7 +200,7 @@ export function DoctorForm({ open, doctor, onClose, onSubmit }: DoctorFormProps)
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Department</InputLabel>
                   <Select
@@ -219,7 +219,7 @@ export function DoctorForm({ open, doctor, onClose, onSubmit }: DoctorFormProps)
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControlLabel
                   control={
                     <Switch

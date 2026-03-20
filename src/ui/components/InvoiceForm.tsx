@@ -158,7 +158,7 @@ export function InvoiceForm({ open, invoice, onClose, onSubmit }: InvoiceFormPro
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Patient</InputLabel>
                   <Select
@@ -174,7 +174,7 @@ export function InvoiceForm({ open, invoice, onClose, onSubmit }: InvoiceFormPro
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth>
                   <InputLabel>Status</InputLabel>
                   <Select
@@ -189,7 +189,7 @@ export function InvoiceForm({ open, invoice, onClose, onSubmit }: InvoiceFormPro
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Insurance Provider"
@@ -197,7 +197,7 @@ export function InvoiceForm({ open, invoice, onClose, onSubmit }: InvoiceFormPro
                   onChange={(e) => handleChange('insuranceProvider', e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Insurance Policy ID"
@@ -259,7 +259,7 @@ export function InvoiceForm({ open, invoice, onClose, onSubmit }: InvoiceFormPro
 
             <Box sx={{ mt: 4 }}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Paid Amount"
@@ -271,7 +271,7 @@ export function InvoiceForm({ open, invoice, onClose, onSubmit }: InvoiceFormPro
                     InputProps={{ startAdornment: '$' }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <Box sx={{ textAlign: 'right', pt: 2 }}>
                     <Typography variant="body1" color="text.secondary">
                       Total Amount:

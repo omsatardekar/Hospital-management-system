@@ -4,7 +4,8 @@ import { ProtectedRoute } from './ProtectedRoute'
 import { AppShell } from '../ui/layout/AppShell'
 import { PageLoader } from '../ui/shared/PageLoader'
 
-const LoginPage = lazy(() => import('../pages/LoginPage'))
+const SplashPage = lazy(() => import('../ui/pages/SplashPage'))
+const LoginPage = lazy(() => import('../ui/pages/LoginPage'))
 const DashboardPage = lazy(() => import('../ui/pages/DashboardPage'))
 const DoctorsPage = lazy(() => import('../ui/pages/DoctorsPage'))
 const PatientsPage = lazy(() => import('../ui/pages/PatientsPage'))
@@ -23,6 +24,7 @@ export function AppRouter() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
+        <Route index element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/403" element={<ForbiddenPage />} />
 

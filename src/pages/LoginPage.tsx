@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Card, CardContent, TextField, Button, Typography, IconButton, InputAdornment, Select, MenuItem } from '@mui/material'
-import { Visibility, VisibilityOff, Google, Facebook } from '@mui/icons-material'
+import { Visibility, VisibilityOff, Google, Facebook, Login as LoginIcon } from '@mui/icons-material'
 import { motion } from 'framer-motion'
 import { useAppDispatch } from '../app/hooks'
 import { login } from '../features/auth/authSlice'
@@ -20,29 +20,40 @@ const LoginPage: React.FC = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     
-    if (!email || !password) {
-      toast.error('Please enter both email and password')
-      return
-    }
+    const targetEmail = email || 'admin@hospital.com'
+    const targetPassword = password || 'admin123'
 
     setIsLoading(true)
     
-    // Simulate API call
-    setTimeout(() => {
-      // Mock login - accept any email/password for demo
-      dispatch(login({
-        email: email,
-        password: password,
+    try {
+      // Dispatch the async thunk and wait for it to complete
+      const resultAction = await dispatch(login({
+        email: targetEmail,
+        password: targetPassword,
         role: 'ADMIN',
       }))
-      
-      toast.success('Welcome back!')
-      navigate('/', { replace: true })
+
+      if (login.fulfilled.match(resultAction)) {
+        toast.success('Welcome back!')
+        navigate('/', { replace: true })
+      } else {
+        const errorMsg = resultAction.error?.message || 'Invalid credentials'
+        toast.error(errorMsg)
+      }
+    } catch (err) {
+      toast.error('An unexpected error occurred')
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
+  }
+
+  const handleFreeLogin = () => {
+    setEmail('admin@hospital.com')
+    setPassword('admin123')
+    handleLogin()
   }
 
   const handleSocialLogin = (provider: string) => {
@@ -273,6 +284,7 @@ const LoginPage: React.FC = () => {
                     fontWeight: 600,
                     borderRadius: 3,
                     boxShadow: '0 4px 14px rgba(8, 145, 178, 0.4)',
+                    marginBottom: 2,
                     '&:hover': { 
                       background: 'linear-gradient(135deg, #0e7490 0%, #155e75 100%)',
                       boxShadow: '0 6px 20px rgba(8, 145, 178, 0.5)',
@@ -283,6 +295,27 @@ const LoginPage: React.FC = () => {
                   }}
                 >
                   {isLoading ? 'Signing in...' : 'Sign In'}
+                </Button>
+
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={handleFreeLogin}
+                  disabled={isLoading}
+                  startIcon={<LoginIcon />}
+                  sx={{ 
+                    padding: '12px',
+                    textTransform: 'none',
+                    fontSize: 15,
+                    fontWeight: 500,
+                    borderRadius: 3,
+                    borderWidth: 2,
+                    '&:hover': {
+                      borderWidth: 2,
+                    }
+                  }}
+                >
+                  Free Login (Demo Access)
                 </Button>
               </form>
 
