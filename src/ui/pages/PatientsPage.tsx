@@ -6,8 +6,8 @@ import { motion } from 'framer-motion'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { PageHeader } from '../shared/PageHeader'
 import { PatientsTable } from '../components/PatientsTable'
-import { PatientForm } from '../components/PatientForm'
-import { addPatient, updatePatient, deletePatient, type Patient } from '../../features/patients/patientsSlice'
+import { PatientRegistrationForm } from '../components/forms/PatientRegistrationForm'
+import { addPatient, updatePatient, deletePatient } from '../../features/patients/patientsSlice'
 import toast from 'react-hot-toast'
 
 export default function PatientsPage() {
@@ -16,14 +16,14 @@ export default function PatientsPage() {
   const patients = useAppSelector((state) => state.patients.items)
   
   const [showForm, setShowForm] = useState(false)
-  const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
+  const [editingPatient, setEditingPatient] = useState<any | null>(null)
 
   const handleAddPatient = () => {
     setEditingPatient(null)
     setShowForm(true)
   }
 
-  const handleEditPatient = (patient: Patient) => {
+  const handleEditPatient = (patient: any) => {
     setEditingPatient(patient)
     setShowForm(true)
   }
@@ -39,7 +39,7 @@ export default function PatientsPage() {
     navigate(`/patients/${patientId}`)
   }
 
-  const handleFormSubmit = (patientData: Omit<Patient, 'id' | 'medicalTimeline' | 'reports'>) => {
+  const handleFormSubmit = (patientData: any) => {
     if (editingPatient) {
       dispatch(updatePatient({ 
         id: editingPatient.id, 
@@ -47,7 +47,7 @@ export default function PatientsPage() {
       }))
       toast.success('Patient updated successfully')
     } else {
-      const newPatient: Patient = {
+      const newPatient = {
         ...patientData,
         id: `PAT-${Date.now()}`,
         medicalTimeline: [],
@@ -94,7 +94,7 @@ export default function PatientsPage() {
         onView={handleViewPatient}
       />
 
-      <PatientForm
+      <PatientRegistrationForm
         open={showForm}
         patient={editingPatient}
         onClose={handleFormClose}

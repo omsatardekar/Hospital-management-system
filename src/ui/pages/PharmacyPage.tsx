@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { PageHeader } from '../shared/PageHeader'
 import { PharmacyTable } from '../components/PharmacyTable'
-import { MedicineForm } from '../components/MedicineForm'
-import { addMedicine, updateMedicine, deleteMedicine, updateStock, type Medicine } from '../../features/pharmacy/pharmacySlice'
+import { SimpleMedicineForm } from '../components/forms/SimpleMedicineForm'
+import { addMedicine, updateMedicine, deleteMedicine, updateStock } from '../../features/pharmacy/pharmacySlice'
 import toast from 'react-hot-toast'
 
 export default function PharmacyPage() {
@@ -14,14 +14,14 @@ export default function PharmacyPage() {
   const medicines = useAppSelector((state) => state.pharmacy.medicines)
   
   const [showForm, setShowForm] = useState(false)
-  const [editingMedicine, setEditingMedicine] = useState<Medicine | null>(null)
+  const [editingMedicine, setEditingMedicine] = useState<any | null>(null)
 
   const handleAddMedicine = () => {
     setEditingMedicine(null)
     setShowForm(true)
   }
 
-  const handleEditMedicine = (medicine: Medicine) => {
+  const handleEditMedicine = (medicine: any) => {
     setEditingMedicine(medicine)
     setShowForm(true)
   }
@@ -39,7 +39,7 @@ export default function PharmacyPage() {
     toast.success(`Stock ${action}: ${Math.abs(quantity)} units`)
   }
 
-  const handleFormSubmit = (medicineData: Omit<Medicine, 'id' | 'updatedAt'>) => {
+  const handleFormSubmit = (medicineData: any) => {
     if (editingMedicine) {
       dispatch(updateMedicine({ 
         id: editingMedicine.id, 
@@ -47,7 +47,7 @@ export default function PharmacyPage() {
       }))
       toast.success('Medicine updated successfully')
     } else {
-      const newMedicine: Medicine = {
+      const newMedicine = {
         ...medicineData,
         id: `MED-${Date.now()}`,
         updatedAt: new Date().toISOString(),
@@ -175,7 +175,7 @@ export default function PharmacyPage() {
         onUpdateStock={handleUpdateStock}
       />
 
-      <MedicineForm
+      <SimpleMedicineForm
         open={showForm}
         medicine={editingMedicine}
         onClose={handleFormClose}

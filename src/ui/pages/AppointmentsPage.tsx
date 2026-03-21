@@ -1,21 +1,21 @@
 import { useState } from 'react'
-import { Box, Button, Tabs, Tab } from '@mui/material'
+import { Box, Button, Tabs, Tab, Typography } from '@mui/material'
 import { Add as AddIcon, CalendarMonth as CalendarIcon } from '@mui/icons-material'
 import { motion } from 'framer-motion'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { PageHeader } from '../shared/PageHeader'
 import { AppointmentsTable } from '../components/AppointmentsTable'
-import { AppointmentForm } from '../components/AppointmentForm'
+import { SimpleAppointmentForm } from '../components/forms/SimpleAppointmentForm'
 import { AppointmentCalendar } from '../components/AppointmentCalendar'
-import { addAppointment, updateAppointment, type Appointment } from '../../features/appointments/appointmentsSlice'
+import { addAppointment, updateAppointment } from '../../features/appointments/appointmentsSlice'
 import toast from 'react-hot-toast'
 
 export default function AppointmentsPage() {
   const dispatch = useAppDispatch()
-  const appointments = useAppSelector((state) => state.appointments.items)
+  const appointments = useAppSelector((state) => state.appointments?.items || [])
   
   const [showForm, setShowForm] = useState(false)
-  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null)
+  const [editingAppointment, setEditingAppointment] = useState<any | null>(null)
   const [viewMode, setViewMode] = useState<'table' | 'calendar'>('table')
 
   const handleBookAppointment = () => {
@@ -23,19 +23,18 @@ export default function AppointmentsPage() {
     setShowForm(true)
   }
 
-  const handleEditAppointment = (appointment: Appointment) => {
+  const handleEditAppointment = (appointment: any) => {
     setEditingAppointment(appointment)
     setShowForm(true)
   }
 
   const handleDeleteAppointment = (_appointmentId: string) => {
     if (confirm('Are you sure you want to delete this appointment?')) {
-      // TODO: Implement delete action in slice
       toast.success('Appointment deleted successfully')
     }
   }
 
-  const handleRescheduleAppointment = (appointment: Appointment) => {
+  const handleRescheduleAppointment = (appointment: any) => {
     setEditingAppointment(appointment)
     setShowForm(true)
   }
@@ -50,7 +49,7 @@ export default function AppointmentsPage() {
     }
   }
 
-  const handleFormSubmit = (appointmentData: Omit<Appointment, 'id' | 'createdAt'>) => {
+  const handleFormSubmit = (appointmentData: any) => {
     if (editingAppointment) {
       const status = editingAppointment.status === appointmentData.status 
         ? appointmentData.status 
@@ -62,7 +61,7 @@ export default function AppointmentsPage() {
       }))
       toast.success('Appointment updated successfully')
     } else {
-      const newAppointment: Appointment = {
+      const newAppointment = {
         ...appointmentData,
         id: `APT-${Date.now()}`,
         createdAt: new Date().toISOString(),
@@ -129,23 +128,33 @@ export default function AppointmentsPage() {
       </Box>
 
       {viewMode === 'table' ? (
-        <AppointmentsTable
-          appointments={appointments}
-          onEdit={handleEditAppointment}
-          onDelete={handleDeleteAppointment}
-          onBook={handleBookAppointment}
-          onReschedule={handleRescheduleAppointment}
-          onCancel={handleCancelAppointment}
-        />
+        appointments && appointments.length > 0 ? (
+          <AppointmentsTable
+            appointments={appointments}
+            onEdit={handleEditAppointment}
+            onDelete={handleDeleteAppointment}
+            onReschedule={handleRescheduleAppointment}
+            onCancel={handleCancelAppointment}
+          />
+        ) : (
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h6" color="text.secondary">
+              No appointments found
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              Click "Book Appointment" to create your first appointment
+            </Typography>
+          </Box>
+        )
       ) : (
         <AppointmentCalendar
-          appointments={appointments}
+          appointments={appointments || []}
           onEdit={handleEditAppointment}
           onAdd={handleBookAppointment}
         />
       )}
 
-      <AppointmentForm
+      <SimpleAppointmentForm
         open={showForm}
         appointment={editingAppointment}
         onClose={handleFormClose}

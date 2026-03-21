@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { PageHeader } from '../shared/PageHeader'
 import { BillingTable } from '../components/BillingTable'
-import { InvoiceForm } from '../components/InvoiceForm'
-import { addInvoice, updateInvoice, type Invoice } from '../../features/billing/billingSlice'
+import { SimpleBillingForm } from '../components/forms/SimpleBillingForm'
+import { addInvoice, updateInvoice } from '../../features/billing/billingSlice'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Chip } from '@mui/material'
@@ -15,15 +15,15 @@ export default function BillingPage() {
   const invoices = useAppSelector((state) => state.billing.invoices)
   
   const [showForm, setShowForm] = useState(false)
-  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
-  const [viewingInvoice, setViewingInvoice] = useState<Invoice | null>(null)
+  const [editingInvoice, setEditingInvoice] = useState<any | null>(null)
+  const [viewingInvoice, setViewingInvoice] = useState<any | null>(null)
 
   const handleGenerateInvoice = () => {
     setEditingInvoice(null)
     setShowForm(true)
   }
 
-  const handleEditInvoice = (invoice: Invoice) => {
+  const handleEditInvoice = (invoice: any) => {
     setEditingInvoice(invoice)
     setShowForm(true)
   }
@@ -35,7 +35,7 @@ export default function BillingPage() {
     }
   }
 
-  const handleViewInvoice = (invoice: Invoice) => {
+  const handleViewInvoice = (invoice: any) => {
     setViewingInvoice(invoice)
   }
 
@@ -62,7 +62,7 @@ export default function BillingPage() {
     }
   }
 
-  const handleFormSubmit = (invoiceData: Omit<Invoice, 'id' | 'createdAt'>) => {
+  const handleFormSubmit = (invoiceData: any) => {
     if (editingInvoice) {
       dispatch(updateInvoice({ 
         id: editingInvoice.id, 
@@ -70,7 +70,7 @@ export default function BillingPage() {
       }))
       toast.success('Invoice updated successfully')
     } else {
-      const newInvoice: Invoice = {
+      const newInvoice = {
         ...invoiceData,
         id: `INV-${Date.now()}`,
         createdAt: new Date().toISOString(),
@@ -135,9 +135,9 @@ export default function BillingPage() {
         onMarkPaid={handleMarkPaid}
       />
 
-      <InvoiceForm
+      <SimpleBillingForm
         open={showForm}
-        invoice={editingInvoice}
+        billing={editingInvoice}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
       />
@@ -200,7 +200,7 @@ export default function BillingPage() {
                 <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
                   Invoice Items
                 </Typography>
-                {viewingInvoice.items.map((item, index) => (
+                {viewingInvoice.items.map((item: any, index: number) => (
                   <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', py: 1 }}>
                     <Typography variant="body2">{item.label}</Typography>
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>

@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { PageHeader } from '../shared/PageHeader'
 import { LabTestsTable } from '../components/LabTestsTable'
-import { LabTestForm } from '../components/LabTestForm'
-import { addLabTest, updateLabTest, deleteLabTest, addReportFile, type LabTest } from '../../features/lab/labSlice'
+import { SimpleLabForm } from '../components/forms/SimpleLabForm'
+import { addLabTest, updateLabTest, deleteLabTest, addReportFile } from '../../features/lab/labSlice'
 import toast from 'react-hot-toast'
 
 export default function LaboratoryPage() {
@@ -14,15 +14,15 @@ export default function LaboratoryPage() {
   const tests = useAppSelector((state) => state.lab.tests)
   
   const [showForm, setShowForm] = useState(false)
-  const [editingTest, setEditingTest] = useState<LabTest | null>(null)
-  const [viewingTest, setViewingTest] = useState<LabTest | null>(null)
+  const [editingTest, setEditingTest] = useState<any | null>(null)
+  const [viewingTest, setViewingTest] = useState<any | null>(null)
 
   const handleAddTest = () => {
     setEditingTest(null)
     setShowForm(true)
   }
 
-  const handleEditTest = (test: LabTest) => {
+  const handleEditTest = (test: any) => {
     setEditingTest(test)
     setShowForm(true)
   }
@@ -56,11 +56,11 @@ export default function LaboratoryPage() {
     }
   }
 
-  const handleViewResults = (test: LabTest) => {
+  const handleViewResults = (test: any) => {
     setViewingTest(test)
   }
 
-  const handleFormSubmit = (testData: Omit<LabTest, 'id' | 'requestedAt' | 'reportedAt' | 'reportFiles'>) => {
+  const handleFormSubmit = (testData: any) => {
     if (editingTest) {
       dispatch(updateLabTest({ 
         id: editingTest.id, 
@@ -68,7 +68,7 @@ export default function LaboratoryPage() {
       }))
       toast.success('Lab test updated successfully')
     } else {
-      const newTest: LabTest = {
+      const newTest = {
         ...testData,
         id: `LAB-${Date.now()}`,
         requestedAt: new Date().toISOString(),
@@ -201,9 +201,9 @@ export default function LaboratoryPage() {
         onViewResults={handleViewResults}
       />
 
-      <LabTestForm
+      <SimpleLabForm
         open={showForm}
-        test={editingTest}
+        labTest={editingTest}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
       />
@@ -230,7 +230,7 @@ export default function LaboratoryPage() {
                 </Typography>
               ) : (
                 <List>
-                  {viewingTest.reportFiles.map((file) => (
+                  {viewingTest.reportFiles.map((file: any) => (
                     <ListItem key={file.id}>
                       <ListItemIcon>
                         {getFileIcon(file.type)}

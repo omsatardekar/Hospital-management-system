@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { PageHeader } from '../shared/PageHeader'
 import { DoctorsTable } from '../components/DoctorsTable'
-import { DoctorForm } from '../components/DoctorForm'
-import { addDoctor, updateDoctor, deleteDoctor, type Doctor } from '../../features/doctors/doctorsSlice'
+import { SimpleDoctorForm } from '../components/forms/SimpleDoctorForm'
+import { addDoctor, updateDoctor, deleteDoctor } from '../../features/doctors/doctorsSlice'
 import toast from 'react-hot-toast'
 
 export default function DoctorsPage() {
@@ -14,14 +14,14 @@ export default function DoctorsPage() {
   const doctors = useAppSelector((state) => state.doctors.items)
   
   const [showForm, setShowForm] = useState(false)
-  const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null)
+  const [editingDoctor, setEditingDoctor] = useState<any | null>(null)
 
   const handleAddDoctor = () => {
     setEditingDoctor(null)
     setShowForm(true)
   }
 
-  const handleEditDoctor = (doctor: Doctor) => {
+  const handleEditDoctor = (doctor: any) => {
     setEditingDoctor(doctor)
     setShowForm(true)
   }
@@ -47,7 +47,7 @@ export default function DoctorsPage() {
     toast.success(`Doctor ${newStatus.toLowerCase()} successfully`)
   }
 
-  const handleFormSubmit = (doctorData: Omit<Doctor, 'id' | 'todayAppointments' | 'rating'>) => {
+  const handleFormSubmit = (doctorData: any) => {
     if (editingDoctor) {
       dispatch(updateDoctor({ 
         id: editingDoctor.id, 
@@ -55,7 +55,7 @@ export default function DoctorsPage() {
       }))
       toast.success('Doctor updated successfully')
     } else {
-      const newDoctor: Doctor = {
+      const newDoctor = {
         ...doctorData,
         id: `DOC-${Date.now()}`,
         todayAppointments: 0,
@@ -103,7 +103,7 @@ export default function DoctorsPage() {
         onToggleStatus={handleToggleStatus}
       />
 
-      <DoctorForm
+      <SimpleDoctorForm
         open={showForm}
         doctor={editingDoctor}
         onClose={handleFormClose}
