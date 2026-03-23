@@ -7,7 +7,7 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import toast from 'react-hot-toast'
 import { useAppDispatch } from '../../app/hooks'
 import { login } from '../../features/auth/authSlice'
-import { Role } from '../../features/auth/rbac'
+import type { Role } from '../../features/auth/rbac'
 
 export default function LoginPage() {
   const navigate = useNavigate()
