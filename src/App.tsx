@@ -1,0 +1,17 @@
+import { useEffect } from 'react'
+import { AppRouter } from './routes/AppRouter'
+import { useAppDispatch, useAppSelector } from './app/hooks'
+import { bootstrap } from './features/app/appSlice'
+
+export default function App() {
+  const dispatch = useAppDispatch()
+  const token = useAppSelector((s) => s.auth.token)
+  const bootStatus = useAppSelector((s) => s.app.bootStatus)
+
+  useEffect(() => {
+    if (!token) return
+    if (bootStatus === 'idle') dispatch(bootstrap())
+  }, [dispatch, token, bootStatus])
+
+  return <AppRouter />
+}
