@@ -7,6 +7,7 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import toast from 'react-hot-toast'
 import { useAppDispatch } from '../../app/hooks'
 import { login } from '../../features/auth/authSlice'
+import { Role } from '../../features/auth/rbac'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -27,15 +28,23 @@ export default function LoginPage() {
     setIsLoading(true)
     
     // Determine role based on email for demo purposes
-    let role: 'ADMIN' | 'DOCTOR' | 'PHARMACY' = 'DOCTOR'
+    let role: Role = 'DOCTOR'
     if (formData.email.includes('admin')) role = 'ADMIN'
-    if (formData.email.includes('pharmacy')) role = 'PHARMACY'
+    else if (formData.email.includes('ops')) role = 'OPS_MANAGER'
+    else if (formData.email.includes('finance')) role = 'FINANCE'
+    else if (formData.email.includes('pharmacy')) role = 'PHARMACY'
+    else if (formData.email.includes('lab')) role = 'LAB'
 
     try {
       const res = await dispatch(login({ email: formData.email, password: formData.password, role }))
       if (login.fulfilled.match(res)) {
          toast.success(`Welcome back, ${role.toLowerCase()}!`)
-         navigate(role === 'DOCTOR' ? '/doctor/dashboard' : '/dashboard')
+         // Route to doctor dashboard if DOCTOR, else general dashboard
+         if (role === 'DOCTOR') {
+           navigate('/doctor/dashboard')
+         } else {
+           navigate('/dashboard')
+         }
       } else {
          toast.error('Invalid credentials')
       }
