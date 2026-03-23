@@ -10,7 +10,6 @@ const DashboardPage = lazy(() => import('../ui/pages/DashboardPage'))
 const DoctorsPage = lazy(() => import('../ui/pages/DoctorsPage'))
 const PatientsPage = lazy(() => import('../ui/pages/PatientsPage'))
 const PatientProfilePage = lazy(() => import('../ui/pages/PatientProfilePage'))
-const AppointmentsPage = lazy(() => import('../ui/pages/AppointmentsPage'))
 const BillingPage = lazy(() => import('../ui/pages/BillingPage'))
 const PharmacyPage = lazy(() => import('../ui/pages/PharmacyPage'))
 const LaboratoryPage = lazy(() => import('../ui/pages/LaboratoryPage'))
@@ -45,9 +44,6 @@ export function AppRouter() {
               <Route path="/patients/:patientId" element={<PatientProfilePage />} />
             </Route>
 
-            <Route element={<ProtectedRoute permission="appointments:read" />}>
-              <Route path="/appointments" element={<AppointmentsPage />} />
-            </Route>
 
             <Route element={<ProtectedRoute permission="billing:read" />}>
               <Route path="/billing" element={<BillingPage />} />

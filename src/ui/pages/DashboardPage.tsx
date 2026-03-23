@@ -1,25 +1,23 @@
-import { Box, Card, CardContent, Typography, Avatar, LinearProgress, Chip, alpha } from '@mui/material'
+import { Box, Card, CardContent, Typography, Avatar, LinearProgress, Chip, alpha, IconButton, List, ListItem, ListItemText } from '@mui/material'
 import Grid from '@mui/material/GridLegacy'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useAppSelector } from '../../app/hooks'
 import { StatCard } from '../components/StatCard'
-import { Bar, BarChart, CartesianGrid, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell, Area, AreaChart } from 'recharts'
-import { motion } from 'framer-motion'
+import { Bar, BarChart, CartesianGrid, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell, Area, AreaChart } from 'recharts'
+import { motion, AnimatePresence } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import { 
   People, 
   MedicalServices, 
   CalendarToday, 
   AttachMoney,
-  TrendingUp,
-  TrendingDown,
   LocalHospital,
-  MoreVert,
-  Schedule,
   CheckCircle,
   Cancel,
   Pending,
   Bed,
   Emergency,
+  Close,
 } from '@mui/icons-material'
 
 const COLORS = ['#0891b2', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
@@ -34,7 +32,7 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -139,6 +137,8 @@ export default function DashboardPage() {
     }))
   }, [audit])
 
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
+
   return (
     <Box sx={{ p: { xs: 2, md: 3 }, backgroundColor: 'background.default', minHeight: '100vh' }}>
       <motion.div
@@ -156,6 +156,8 @@ export default function DashboardPage() {
               icon={<People sx={{ fontSize: 24 }} />}
               color="primary"
               delay={0}
+              layoutId="stat-patients"
+              onClick={() => setSelectedCardId('stat-patients')}
             />
           </Grid>
           <Grid item xs={12} sm={6} lg={3}>
@@ -166,6 +168,8 @@ export default function DashboardPage() {
               icon={<MedicalServices sx={{ fontSize: 24 }} />}
               color="success"
               delay={0.1}
+              layoutId="stat-doctors"
+              onClick={() => setSelectedCardId('stat-doctors')}
             />
           </Grid>
           <Grid item xs={12} sm={6} lg={3}>
@@ -176,6 +180,8 @@ export default function DashboardPage() {
               icon={<CalendarToday sx={{ fontSize: 24 }} />}
               color="warning"
               delay={0.2}
+              layoutId="stat-appointments"
+              onClick={() => setSelectedCardId('stat-appointments')}
             />
           </Grid>
           <Grid item xs={12} sm={6} lg={3}>
@@ -186,6 +192,8 @@ export default function DashboardPage() {
               icon={<AttachMoney sx={{ fontSize: 24 }} />}
               color="info"
               delay={0.3}
+              layoutId="stat-revenue"
+              onClick={() => setSelectedCardId('stat-revenue')}
             />
           </Grid>
         </Grid>
@@ -194,9 +202,16 @@ export default function DashboardPage() {
         <Grid container spacing={3} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6} md={3}>
             <motion.div variants={itemVariants}>
-              <Card sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2] }}>
+              <Card 
+                component={motion.div}
+                layoutId="stat-beds"
+                onClick={() => setSelectedCardId('stat-beds')}
+                whileHover="hover"
+                variants={{ hover: { y: -4, transition: { duration: 0.2 } } }}
+                sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2], cursor: 'pointer', transition: 'box-shadow 0.3s', '&:hover': { boxShadow: (t) => t.shadows[4] } }}
+              >
                 <CardContent sx={{ p: 2.5, display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ 
+                  <Box component={motion.div} variants={{ hover: { scale: 1.15, rotate: 5, transition: { type: 'spring', stiffness: 300 } } }} sx={{ 
                     width: 48, 
                     height: 48, 
                     borderRadius: 3, 
@@ -222,9 +237,16 @@ export default function DashboardPage() {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <motion.div variants={itemVariants}>
-              <Card sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2] }}>
+              <Card 
+                component={motion.div}
+                layoutId="stat-emergency"
+                onClick={() => setSelectedCardId('stat-emergency')}
+                whileHover="hover"
+                variants={{ hover: { y: -4, transition: { duration: 0.2 } } }}
+                sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2], cursor: 'pointer', transition: 'box-shadow 0.3s', '&:hover': { boxShadow: (t) => t.shadows[4] } }}
+              >
                 <CardContent sx={{ p: 2.5, display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ 
+                  <Box component={motion.div} variants={{ hover: { scale: 1.15, rotate: 5, transition: { type: 'spring', stiffness: 300 } } }} sx={{ 
                     width: 48, 
                     height: 48, 
                     borderRadius: 3, 
@@ -250,9 +272,16 @@ export default function DashboardPage() {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <motion.div variants={itemVariants}>
-              <Card sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2] }}>
+              <Card 
+                component={motion.div}
+                layoutId="stat-pending"
+                onClick={() => setSelectedCardId('stat-pending')}
+                whileHover="hover"
+                variants={{ hover: { y: -4, transition: { duration: 0.2 } } }}
+                sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2], cursor: 'pointer', transition: 'box-shadow 0.3s', '&:hover': { boxShadow: (t) => t.shadows[4] } }}
+              >
                 <CardContent sx={{ p: 2.5, display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ 
+                  <Box component={motion.div} variants={{ hover: { scale: 1.15, rotate: 5, transition: { type: 'spring', stiffness: 300 } } }} sx={{ 
                     width: 48, 
                     height: 48, 
                     borderRadius: 3, 
@@ -278,9 +307,16 @@ export default function DashboardPage() {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <motion.div variants={itemVariants}>
-              <Card sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2] }}>
+              <Card 
+                component={motion.div}
+                layoutId="stat-active"
+                onClick={() => setSelectedCardId('stat-active')}
+                whileHover="hover"
+                variants={{ hover: { y: -4, transition: { duration: 0.2 } } }}
+                sx={{ borderRadius: 4, boxShadow: (t) => t.shadows[2], cursor: 'pointer', transition: 'box-shadow 0.3s', '&:hover': { boxShadow: (t) => t.shadows[4] } }}
+              >
                 <CardContent sx={{ p: 2.5, display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ 
+                  <Box component={motion.div} variants={{ hover: { scale: 1.15, rotate: 5, transition: { type: 'spring', stiffness: 300 } } }} sx={{ 
                     width: 48, 
                     height: 48, 
                     borderRadius: 3, 
@@ -343,7 +379,7 @@ export default function DashboardPage() {
                             <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke={(t) => alpha('#000', 0.05)} />
+                        <CartesianGrid strokeDasharray="3 3" stroke={alpha('#000', 0.05)} />
                         <XAxis dataKey="day" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
                         <YAxis yAxisId="left" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
                         <YAxis yAxisId="right" orientation="right" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
@@ -450,7 +486,7 @@ export default function DashboardPage() {
                   <Box sx={{ height: 220 }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={revenueTrend}>
-                        <CartesianGrid strokeDasharray="3 3" stroke={(t) => alpha('#000', 0.05)} vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke={alpha('#000', 0.05)} vertical={false} />
                         <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
                         <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${(val/1000).toFixed(0)}k`} />
                         <Tooltip 
@@ -460,7 +496,7 @@ export default function DashboardPage() {
                             borderRadius: 12,
                             boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
                           }} 
-                          formatter={(val: number) => [`₹${val.toLocaleString()}`, 'Revenue']}
+                          formatter={(val: any) => [`₹${Number(val).toLocaleString()}`, 'Revenue']}
                         />
                         <Bar dataKey="revenue" fill="#0891b2" radius={[6, 6, 0, 0]} />
                       </BarChart>
@@ -639,6 +675,111 @@ export default function DashboardPage() {
           </Grid>
         </Grid>
       </motion.div>
+
+      {/* Popovers */}
+      <AnimatePresence>
+        {selectedCardId && (
+          <Box
+            component={motion.div}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            sx={{
+              position: 'fixed',
+              top: 0, left: 0, right: 0, bottom: 0,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              zIndex: 1200,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: { xs: 2, md: 4 }
+            }}
+            onClick={() => setSelectedCardId(null)}
+          >
+            <Card
+              component={motion.div}
+              layoutId={selectedCardId}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              sx={{
+                width: '100%',
+                maxWidth: 800,
+                maxHeight: '90vh',
+                overflowY: 'auto',
+                borderRadius: 4,
+                boxShadow: (t) => t.shadows[24],
+                bgcolor: 'background.paper',
+              }}
+            >
+              <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>
+                  {selectedCardId === 'stat-patients' && 'Patients Overview'}
+                  {selectedCardId === 'stat-doctors' && 'Doctors Directory'}
+                  {selectedCardId === 'stat-appointments' && 'Today\'s Schedule'}
+                  {selectedCardId === 'stat-revenue' && 'Financial Details'}
+                  {selectedCardId === 'stat-beds' && 'Bed Occupancy'}
+                  {selectedCardId === 'stat-emergency' && 'Emergency Ward'}
+                  {selectedCardId === 'stat-pending' && 'Pending Payments'}
+                  {selectedCardId === 'stat-active' && 'Active Treatment'}
+                </Typography>
+                <IconButton onClick={() => setSelectedCardId(null)}>
+                  <Close />
+                </IconButton>
+              </Box>
+              <CardContent sx={{ p: 3 }}>
+                {selectedCardId === 'stat-patients' && (
+                  <List>
+                    {patients.slice(0, 10).map((p) => (
+                      <ListItem key={p.id} divider>
+                        <ListItemText primary={p.name} secondary={`${p.gender}, Age ${p.age} • ${p.phone}`} />
+                        <Chip label={p.status} size="small" color={p.status === 'ACTIVE' ? 'success' : 'default'} />
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+                {selectedCardId === 'stat-doctors' && (
+                  <List>
+                    {doctors.slice(0, 10).map((d) => (
+                      <ListItem key={d.id} divider>
+                        <ListItemText primary={`Dr. ${d.name}`} secondary={`${d.department} • ${d.specialization}`} />
+                        <Chip label={d.status} size="small" color={d.status === 'ACTIVE' ? 'success' : 'default'} />
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+                {selectedCardId === 'stat-appointments' && (
+                  <List>
+                    {appointments.filter((a) => a.startAt >= startOfToday && a.startAt < endOfToday).map((app) => {
+                      const patient = patients.find(p => p.id === app.patientId)
+                      const doc = doctors.find(d => d.id === app.doctorId)
+                      return (
+                        <ListItem key={app.id} divider>
+                          <ListItemText primary={`${new Date(app.startAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${patient?.name}`} secondary={`With Dr. ${doc?.name}`} />
+                          <Chip label={app.status} size="small" color={app.status === 'SCHEDULED' ? 'primary' : 'default'} />
+                        </ListItem>
+                      )
+                    })}
+                    {appointments.filter((a) => a.startAt >= startOfToday && a.startAt < endOfToday).length === 0 && (
+                      <Typography variant="body2" color="text.secondary">No appointments scheduled for today.</Typography>
+                    )}
+                  </List>
+                )}
+                {selectedCardId === 'stat-revenue' && (
+                  <Box>
+                    <Typography variant="h6" gutterBottom>Total Revenue: ₹{(totalRevenue / 100000).toFixed(1)}L</Typography>
+                    <Typography variant="body2" color="text.secondary">Detailed revenue analytics are presented on the main dashboard charts.</Typography>
+                  </Box>
+                )}
+                {/* Fallback for others */}
+                {['stat-beds', 'stat-emergency', 'stat-pending', 'stat-active'].includes(selectedCardId) && (
+                  <Typography variant="body1" color="text.secondary">
+                    Detailed information and metrics for this section will be displayed here soon.
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Box>
+        )}
+      </AnimatePresence>
     </Box>
   )
 }

@@ -47,6 +47,7 @@ export function AppointmentsTable({
   onReschedule, 
   onCancel 
 }: AppointmentsTableProps) {
+  console.log('AppointmentsTable RENDER')
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [dateFilter, setDateFilter] = useState<string>('all')
@@ -65,9 +66,9 @@ export function AppointmentsTable({
       const doctor = doctors.find(d => d?.id === appointment.doctorId)
       
       const matchesSearch =
-        patient?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doctor?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        appointment.reason?.toLowerCase().includes(searchTerm.toLowerCase())
+        (patient?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (doctor?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (appointment.reason?.toLowerCase() || '').includes(searchTerm.toLowerCase())
       
       const matchesStatus = statusFilter === 'all' || appointment.status === statusFilter
       

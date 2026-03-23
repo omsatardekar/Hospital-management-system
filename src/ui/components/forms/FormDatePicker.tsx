@@ -9,7 +9,7 @@ import { CalendarToday } from '@mui/icons-material'
 import { motion } from 'framer-motion'
 import { DatePicker, type DatePickerProps } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 
 export interface FormDatePickerProps extends Omit<DatePickerProps<Date>, 'renderInput'> {
   label?: string
