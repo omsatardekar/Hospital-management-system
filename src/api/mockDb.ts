@@ -29,7 +29,7 @@ const INDIAN_FIRST_NAMES = [
   'Ojas', 'Prakash', 'Queen', 'Rashmi', 'Sonal', 'Tarun', 'Uday', 'Vikas', 'Washi', 'Xena',
   'Yogita', 'Zeenat', 'Aasha', 'Brijesh', 'Chitra', 'Darshan', 'Ela', 'Firoz', 'Gurmit',
   'Harsha', 'Indu', 'Jahnavi', 'Kalyan', 'Laxmi', 'Madhuri', 'Nanda', 'Omi', 'Pavan',
-  'Rani', 'S सुमन', 'Teja', 'Ujwal', 'Varsha', 'Winay', 'Yashoda', 'Zubin'
+  'Rani', 'Suman', 'Teja', 'Ujwal', 'Varsha', 'Winay', 'Yashoda', 'Zubin'
 ]
 
 const INDIAN_LAST_NAMES = [
@@ -167,6 +167,7 @@ export function createMockDb(): MockDb {
     }
   })
 
+  // Appointments across the last 30 days + next 10 days
   const appointments: Appointment[] = Array.from({ length: 220 }).map((_, i) => {
     const patient = pick(patients)
     const doctor = patient.assignedDoctorId
@@ -406,3 +407,4 @@ export function parseRole(v: unknown): Role | undefined {
   const allowed: Role[] = ['ADMIN', 'OPS_MANAGER', 'FINANCE', 'PHARMACY', 'LAB', 'DOCTOR']
   return allowed.includes(s as Role) ? (s as Role) : undefined
 }
+

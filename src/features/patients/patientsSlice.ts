@@ -50,3 +50,4 @@ const patientsSlice = createSlice({
 
 export const { seedPatients, updatePatient, addPatient, deletePatient } = patientsSlice.actions
 export default patientsSlice.reducer
+

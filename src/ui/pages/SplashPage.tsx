@@ -5,16 +5,18 @@ import { useNavigate } from 'react-router-dom'
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import { useAppSelector } from '../../app/hooks'
 
 export default function SplashPage() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
+  const role = useAppSelector((s) => s.auth.user?.role)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false)
-      // Navigate directly to dashboard instead of login
-      navigate('/dashboard')
+      // Route doctor users to their own dashboard; others to admin dashboard
+      navigate(role === 'DOCTOR' ? '/doctor/dashboard' : '/dashboard')
     }, 3000)
 
     return () => clearTimeout(timer)

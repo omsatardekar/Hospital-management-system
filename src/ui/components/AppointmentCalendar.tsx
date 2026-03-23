@@ -21,17 +21,16 @@ import {
   Event as EventIcon,
 } from '@mui/icons-material'
 import { motion } from 'framer-motion'
-import { type Appointment } from '../../features/appointments/appointmentsSlice'
 
 interface AppointmentCalendarProps {
-  appointments: Appointment[]
-  onEdit: (appointment: Appointment) => void
+  appointments: any[]
+  onEdit: (appointment: any) => void
   onAdd: () => void
 }
 
 export function AppointmentCalendar({ appointments, onEdit, onAdd }: AppointmentCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
+  const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null)
   const [showDetails, setShowDetails] = useState(false)
 
   const getDaysInMonth = (date: Date) => {
@@ -49,7 +48,7 @@ export function AppointmentCalendar({ appointments, onEdit, onAdd }: Appointment
       days.push(null)
     }
     
-    // Add all days of the month
+    // Add days of the month
     for (let i = 1; i <= daysInMonth; i++) {
       days.push(new Date(year, month, i))
     }
@@ -198,48 +197,43 @@ export function AppointmentCalendar({ appointments, onEdit, onAdd }: Appointment
                       position: 'relative',
                       '&:hover': day ? {
                         backgroundColor: isToday ? 'primary.dark' : 'action.hover',
-                        transform: 'scale(1.05)'
                       } : {},
-                      transition: 'all 0.2s ease'
                     }}
                   >
                     {day && (
                       <>
-                        <Typography 
-                          variant="caption" 
-                          sx={{ 
+                        <Typography
+                          variant="caption"
+                          sx={{
                             fontWeight: isToday ? 700 : 500,
                             color: isToday ? 'white' : 'text.primary',
-                            textAlign: 'center'
+                            textAlign: 'center',
                           }}
                         >
                           {day.getDate()}
                         </Typography>
-                        
-                        {/* Appointment Indicators */}
-                        <Box sx={{ mt: 'auto', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                          {dayAppointments.slice(0, 3).map((apt) => (
-                            <Tooltip key={apt.id} title={`${apt.reason} - ${apt.status}`}>
-                              <Box
-                                sx={{
-                                  width: 4,
-                                  height: 4,
-                                  borderRadius: '50%',
-                                  backgroundColor: getStatusColor(apt.status) === 'primary' ? 'primary.light' :
-                                                   getStatusColor(apt.status) === 'success' ? '#fff' :
-                                                   getStatusColor(apt.status) === 'error' ? '#f87171' :
-                                                   '#fbbf24',
-                                  opacity: 0.8
+                        {dayAppointments.length > 0 && (
+                          <Box sx={{ mt: 'auto', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                            {dayAppointments.slice(0, 2).map((apt, idx) => (
+                              <Chip
+                                key={idx}
+                                label={apt.patientId}
+                                size="small"
+                                color={getStatusColor(apt.status) as any}
+                                sx={{ 
+                                  fontSize: '0.6rem', 
+                                  height: 16,
+                                  '& .MuiChip-label': { padding: '0 4px' }
                                 }}
                               />
-                            </Tooltip>
-                          ))}
-                          {dayAppointments.length > 3 && (
-                            <Typography variant="caption" sx={{ fontSize: 8, color: isToday ? 'white' : 'text.secondary' }}>
-                              +{dayAppointments.length - 3}
-                            </Typography>
-                          )}
-                        </Box>
+                            ))}
+                            {dayAppointments.length > 2 && (
+                              <Typography variant="caption" sx={{ fontSize: '0.6rem', textAlign: 'center' }}>
+                                +{dayAppointments.length - 2} more
+                              </Typography>
+                            )}
+                          </Box>
+                        )}
                       </>
                     )}
                   </Box>
@@ -250,12 +244,11 @@ export function AppointmentCalendar({ appointments, onEdit, onAdd }: Appointment
         </Box>
 
         {/* Appointment Details Dialog */}
-        <Dialog 
-          open={showDetails} 
+        <Dialog
+          open={showDetails}
           onClose={() => setShowDetails(false)}
           maxWidth="sm"
           fullWidth
-          PaperProps={{ sx: { borderRadius: 3 } }}
         >
           {selectedAppointment && (
             <>
