@@ -4,8 +4,16 @@ import { http } from '../../api/http'
 import { seedDoctors } from '../doctors/doctorsSlice'
 import { seedPatients } from '../patients/patientsSlice'
 import { seedAppointments } from '../appointments/appointmentsSlice'
+<<<<<<< HEAD
 import { seedPharmacy } from '../pharmacy/pharmacySlice'
 import { seedLab } from '../lab/labSlice'
+=======
+import { seedInvoices } from '../billing/billingSlice'
+import { seedPharmacy } from '../pharmacy/pharmacySlice'
+import { seedLab } from '../lab/labSlice'
+import { seedUsers } from '../users/usersSlice'
+import { seedAudit } from '../audit/auditSlice'
+>>>>>>> origin/rishi-admin
 import { seedNotifications, pushNotification } from '../ui/uiSlice'
 
 type AppState = {
@@ -22,8 +30,16 @@ export const bootstrap = createAsyncThunk('app/bootstrap', async (_, { dispatch 
   dispatch(seedDoctors(data.doctors))
   dispatch(seedPatients(data.patients))
   dispatch(seedAppointments(data.appointments))
+<<<<<<< HEAD
   dispatch(seedPharmacy(data.pharmacy))
   dispatch(seedLab(data.labTests))
+=======
+  dispatch(seedInvoices(data.invoices))
+  dispatch(seedPharmacy(data.pharmacy))
+  dispatch(seedLab(data.labTests))
+  dispatch(seedUsers(data.users))
+  dispatch(seedAudit(data.audit))
+>>>>>>> origin/rishi-admin
   dispatch(seedNotifications(data.notifications))
 
   dispatch(

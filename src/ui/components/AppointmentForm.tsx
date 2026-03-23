@@ -132,7 +132,7 @@ export function AppointmentForm({ open, appointment, onClose, onSubmit }: Appoin
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Patient</InputLabel>
                   <Select
@@ -148,7 +148,7 @@ export function AppointmentForm({ open, appointment, onClose, onSubmit }: Appoin
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Doctor</InputLabel>
                   <Select
@@ -166,7 +166,7 @@ export function AppointmentForm({ open, appointment, onClose, onSubmit }: Appoin
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Department</InputLabel>
                   <Select
@@ -185,7 +185,7 @@ export function AppointmentForm({ open, appointment, onClose, onSubmit }: Appoin
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth>
                   <InputLabel>Status</InputLabel>
                   <Select
@@ -200,7 +200,7 @@ export function AppointmentForm({ open, appointment, onClose, onSubmit }: Appoin
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Start Time"
@@ -211,7 +211,7 @@ export function AppointmentForm({ open, appointment, onClose, onSubmit }: Appoin
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="End Time"
@@ -222,7 +222,7 @@ export function AppointmentForm({ open, appointment, onClose, onSubmit }: Appoin
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   label="Reason for Visit"

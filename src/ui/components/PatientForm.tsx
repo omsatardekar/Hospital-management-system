@@ -25,7 +25,7 @@ interface PatientFormProps {
 }
 
 export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormProps) {
-  const [formData, setFormData] = useState({
+  const getInitialFormData = () => ({
     name: '',
     gender: 'Male' as 'Male' | 'Female' | 'Other',
     age: '',
@@ -37,9 +37,15 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
     assignedDoctorId: '',
   })
 
+  const [formData, setFormData] = useState(getInitialFormData)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  // Reset form when dialog opens with new patient data
+  // This pattern is intentional for form reset - needed for edit functionality
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
+    if (!open) return
+    
     if (patient) {
       setFormData({
         name: patient.name,
@@ -53,20 +59,10 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
         assignedDoctorId: patient.assignedDoctorId || '',
       })
     } else {
-      setFormData({
-        name: '',
-        gender: 'Male',
-        age: '',
-        phone: '',
-        email: '',
-        bloodGroup: '',
-        status: 'ACTIVE',
-        department: '',
-        assignedDoctorId: '',
-      })
+      setFormData(getInitialFormData())
     }
     setErrors({})
-  }, [patient, open])
+  }, [open, patient])
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -126,7 +122,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Full Name"
@@ -137,7 +133,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Gender</InputLabel>
                   <Select
@@ -151,7 +147,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Age"
@@ -163,7 +159,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -174,7 +170,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Email"
@@ -186,7 +182,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Blood Group</InputLabel>
                   <Select
@@ -205,7 +201,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Department</InputLabel>
                   <Select
@@ -224,7 +220,7 @@ export function PatientForm({ open, patient, onClose, onSubmit }: PatientFormPro
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth>
                   <InputLabel>Status</InputLabel>
                   <Select

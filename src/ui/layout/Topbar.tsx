@@ -107,7 +107,7 @@ export function Topbar() {
           {/* Left - Greeting */}
           <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1 }}>
             <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', letterSpacing: '-0.02em' }}>
-              {greeting}, {user?.name?.split(' ')[0] || 'Admin'}
+              {greeting}, {user?.name?.split(' ')[0] || 'Admin'} 👋
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
               Elite Clinical Management & Healthcare Portal
@@ -412,7 +412,7 @@ export function Topbar() {
         <MenuItem disabled sx={{ opacity: 1 }}>
           <Box>
             <Typography sx={{ fontWeight: 700, fontSize: 14, color: 'text.primary' }}>
-              {user?.name ?? 'User'}
+              {initials || 'User'}
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
               {user?.role ?? '—'}
@@ -420,15 +420,15 @@ export function Topbar() {
           </Box>
         </MenuItem>
         <MenuItem
-          onClick={() => {
-            const next: Role = user?.role === 'ADMIN' ? 'OPS_MANAGER' : 'ADMIN'
-            dispatch(setRole(next))
-            toast('Role switched (mock)')
-            setAnchor(null)
-          }}
-          sx={{ borderRadius: 2, mx: 1, my: 0.5 }}
-        >
-          Switch Role (mock)
+            onClick={() => {
+              const next: Role = user?.role === 'ADMIN' ? 'DOCTOR' : 'ADMIN'
+              dispatch(setRole(next))
+              toast('Role switched (mocked for demo)')
+              setAnchor(null)
+            }}
+            sx={{ borderRadius: 2, mx: 1, my: 0.5 }}
+          >
+            Switch Role (Mock)
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -444,4 +444,3 @@ export function Topbar() {
     </>
   )
 }
-

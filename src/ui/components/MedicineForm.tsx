@@ -113,7 +113,7 @@ export function MedicineForm({ open, medicine, onClose, onSubmit }: MedicineForm
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Medicine Name"
@@ -124,7 +124,7 @@ export function MedicineForm({ open, medicine, onClose, onSubmit }: MedicineForm
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <FormControl fullWidth required>
                   <InputLabel>Category</InputLabel>
                   <Select
@@ -145,7 +145,7 @@ export function MedicineForm({ open, medicine, onClose, onSubmit }: MedicineForm
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid size={{ xs: 12, sm: 4 }}>
                 <TextField
                   fullWidth
                   label="Current Stock"
@@ -157,7 +157,7 @@ export function MedicineForm({ open, medicine, onClose, onSubmit }: MedicineForm
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid size={{ xs: 12, sm: 4 }}>
                 <TextField
                   fullWidth
                   label="Reorder Level"
@@ -169,7 +169,7 @@ export function MedicineForm({ open, medicine, onClose, onSubmit }: MedicineForm
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid size={{ xs: 12, sm: 4 }}>
                 <TextField
                   fullWidth
                   label="Price per Unit"

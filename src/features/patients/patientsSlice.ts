@@ -3,16 +3,31 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 export type Patient = {
   id: string
   name: string
+<<<<<<< HEAD
+=======
+  avatar?: string
+  address?: string
+>>>>>>> origin/rishi-admin
   gender: 'Male' | 'Female' | 'Other'
   age: number
   phone: string
   email: string
   bloodGroup: string
+<<<<<<< HEAD
   status: 'ACTIVE' | 'DISCHARGED' | 'IN_TREATMENT'
   lastVisit: string
   department: string
   assignedDoctorId?: string
   medicalTimeline: { at: string; title: string; note: string }[]
+=======
+  status: 'ACTIVE' | 'DISCHARGED' | 'IN_TREATMENT' | 'ADMITTED' | 'BLOCKED'
+  lastVisit: string
+  department: string
+  assignedDoctorId?: string
+  allergies?: string[]
+  diseases?: string[]
+  medicalTimeline: { at: string; title: string; note: string; type?: 'GENERAL' | 'APPOINTMENT' | 'PAYMENT' | 'STATUS_CHANGE' }[]
+>>>>>>> origin/rishi-admin
   reports: { id: string; name: string; type: string; uploadedAt: string }[]
 }
 

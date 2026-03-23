@@ -9,8 +9,9 @@ export default function App() {
   const bootStatus = useAppSelector((s) => s.app.bootStatus)
 
   useEffect(() => {
-    if (!token) return
-    if (bootStatus === 'idle') dispatch(bootstrap())
+    if (token && bootStatus === 'idle') {
+      dispatch(bootstrap())
+    }
   }, [dispatch, token, bootStatus])
 
   return <AppRouter />

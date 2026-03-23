@@ -4,7 +4,6 @@ import {
   useTheme,
   alpha,
   Badge,
-  IconButton
 } from '@mui/material'
 import {
   Settings as SettingsIcon,
@@ -12,8 +11,7 @@ import {
 } from '@mui/icons-material'
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import { NavLink, useLocation } from 'react-router-dom'
-import toast from 'react-hot-toast'
-import { DOCTOR_NAV_ITEMS, PHARMACIST_NAV_ITEMS, NAV_ITEMS as DEFAULT_NAV } from './nav'
+import { DOCTOR_NAV_ITEMS, PHARMACIST_NAV_ITEMS, ADMIN_NAV_ITEMS, NAV_ITEMS as DEFAULT_NAV } from './nav'
 import { navIcon } from './icons'
 import { useAppSelector } from '../../app/hooks'
 import { hasPermission } from '../../features/auth/rbac'
@@ -30,12 +28,13 @@ export function Sidebar() {
   let navItems = DEFAULT_NAV
   if (role === 'DOCTOR') navItems = DOCTOR_NAV_ITEMS
   if (role === 'PHARMACY') navItems = PHARMACIST_NAV_ITEMS
+  if (role === 'ADMIN') navItems = ADMIN_NAV_ITEMS
 
   const visibleItems = navItems.filter((i) => hasPermission(role, i.permission))
 
   // Dynamic theme colors
-  const primaryColor = role === 'DOCTOR' ? (isDark ? '#0ea5e9' : '#0d9488') : (role === 'PHARMACY' ? (isDark ? '#10b981' : '#059669') : (isDark ? '#38bdf8' : '#0891b2'))
-  const secondaryColor = role === 'DOCTOR' ? (isDark ? '#2563eb' : '#0f766e') : (role === 'PHARMACY' ? (isDark ? '#059669' : '#065f46') : (isDark ? '#0284c7' : '#0e7490'))
+  const primaryColor = role === 'DOCTOR' ? (isDark ? '#0ea5e9' : '#0d9488') : (role === 'ADMIN' ? (isDark ? '#0891b2' : '#0891b2') : (isDark ? '#38bdf8' : '#0891b2'))
+  const secondaryColor = role === 'DOCTOR' ? (isDark ? '#2563eb' : '#0f766e') : (role === 'ADMIN' ? (isDark ? '#0e7490' : '#0e7490') : (isDark ? '#0284c7' : '#0e7490'))
 
   return (
     <Box
@@ -100,19 +99,14 @@ export function Sidebar() {
             }}
           >
             {visibleItems.map((item) => {
-              // SCRUM TOGGLE: Set to false to enable all items
-              const isWorkInProgress = false
-
-
-              const active = !isWorkInProgress && (location.pathname === item.to || location.pathname.startsWith(item.to + '/'))
+              const active = (location.pathname === item.to || location.pathname.startsWith(item.to + '/'))
               const icon = navIcon(item.icon)
 
               return (
                 <Tooltip key={item.key} title={item.label} placement="right" arrow>
                   <Box
-                    component={isWorkInProgress ? 'div' : NavLink}
-                    to={isWorkInProgress ? undefined : item.to}
-                    onClick={() => isWorkInProgress && toast('Feature development in progress...')}
+                    component={NavLink}
+                    to={item.to}
                     sx={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       py: 1, px: 1, borderRadius: '50%',
@@ -122,12 +116,11 @@ export function Sidebar() {
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       textDecoration: 'none',
                       border: active ? `2px solid ${alpha('#fff', 0.5)}` : '2px solid transparent',
-                      minHeight: 48, minWidth: 48, cursor: isWorkInProgress ? 'default' : 'pointer',
-                      opacity: isWorkInProgress ? 0.6 : 1,
+                      minHeight: 48, minWidth: 48, cursor: 'pointer',
                       '&:hover': {
-                        background: active ? '#ffffff' : (isWorkInProgress ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.25)'),
+                        background: active ? '#ffffff' : 'rgba(255,255,255,0.25)',
                         color: active ? primaryColor : '#fff',
-                        transform: isWorkInProgress ? 'none' : 'translateY(-2px)',
+                        transform: 'translateY(-2px)',
                       },
                     }}
                   >
@@ -142,41 +135,19 @@ export function Sidebar() {
 
           {/* User Cap */}
           <Box sx={{ p: 2, pt: 2, pb: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-            <Tooltip title="Clinic Settings" placement="right">
-              <IconButton
-                size="small"
-                sx={{
-                  color: isDark ? alpha('#fff', 0.5) : alpha('#000', 0.4),
-                  '&:hover': { color: primaryColor }
-                }}
-              >
-                <SettingsIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title={`${user?.email} (${role})`} placement="right" arrow>
-              <Badge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={
-                  <VerifiedIcon sx={{ fontSize: 14, color: '#0ea5e9', bgcolor: '#fff', borderRadius: '50%' }} />
-                }
-              >
-                <Box
-                  sx={{
-                    width: 44, height: 44, borderRadius: '50%',
-                    background: isDark ? `linear-gradient(135deg, ${theme.palette.grey[800]} 0%, ${theme.palette.common.black} 100%)` : 'linear-gradient(135deg, #334155 0%, #0f172a 100%)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontWeight: 700, color: '#fff', fontSize: 14, border: `2px solid ${isDark ? alpha('#fff', 0.8) : '#fff'}`,
-                    boxShadow: '0 4px 10px rgba(0,0,0,0.2)', cursor: 'pointer',
-                    '&:hover': { transform: 'scale(1.15)', boxShadow: '0 6px 15px rgba(0,0,0,0.3)' },
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {user?.email?.charAt(0).toUpperCase() ?? 'U'}
-                </Box>
-              </Badge>
-            </Tooltip>
+            <Box
+              sx={{
+                width: 44, height: 44, borderRadius: '50%',
+                background: isDark ? `linear-gradient(135deg, ${theme.palette.grey[800]} 0%, ${theme.palette.common.black} 100%)` : 'linear-gradient(135deg, #334155 0%, #0f172a 100%)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 700, color: '#fff', fontSize: 14, border: `2px solid ${isDark ? alpha('#fff', 0.8) : '#fff'}`,
+                boxShadow: '0 4px 10px rgba(0,0,0,0.2)', cursor: 'pointer',
+                '&:hover': { transform: 'scale(1.15)', boxShadow: '0 6px 15px rgba(0,0,0,0.3)' },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {user?.email?.charAt(0).toUpperCase() ?? 'U'}
+            </Box>
           </Box>
         </Box>
       </motion.div>

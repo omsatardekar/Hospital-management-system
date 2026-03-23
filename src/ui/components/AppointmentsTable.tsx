@@ -26,20 +26,17 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   CalendarMonth as CalendarIcon,
-  EventAvailable as BookIcon,
   EventBusy as CancelIcon,
 } from '@mui/icons-material'
 import { motion } from 'framer-motion'
 import { useState, useMemo } from 'react'
-import { type Appointment } from '../../features/appointments/appointmentsSlice'
 import { useAppSelector } from '../../app/hooks'
 
 interface AppointmentsTableProps {
-  appointments: Appointment[]
-  onEdit: (appointment: Appointment) => void
+  appointments: any[]
+  onEdit: (appointment: any) => void
   onDelete: (appointmentId: string) => void
-  onBook: () => void
-  onReschedule: (appointment: Appointment) => void
+  onReschedule: (appointment: any) => void
   onCancel: (appointmentId: string) => void
 }
 
@@ -47,28 +44,31 @@ export function AppointmentsTable({
   appointments, 
   onEdit, 
   onDelete, 
-  onBook, 
   onReschedule, 
   onCancel 
 }: AppointmentsTableProps) {
+  console.log('AppointmentsTable RENDER')
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [dateFilter, setDateFilter] = useState<string>('all')
   const [page, setPage] = useState(1)
   const rowsPerPage = 10
 
-  const patients = useAppSelector((state) => state.patients.items)
-  const doctors = useAppSelector((state) => state.doctors.items)
+  const patients = useAppSelector((state) => state.patients?.items || [])
+  const doctors = useAppSelector((state) => state.doctors?.items || [])
 
   const filteredAppointments = useMemo(() => {
+    if (!appointments || !Array.isArray(appointments)) return []
+    
     return appointments.filter((appointment) => {
-      const patient = patients.find(p => p.id === appointment.patientId)
-      const doctor = doctors.find(d => d.id === appointment.doctorId)
+      if (!appointment) return false
+      const patient = patients.find(p => p?.id === appointment.patientId)
+      const doctor = doctors.find(d => d?.id === appointment.doctorId)
       
       const matchesSearch =
-        patient?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doctor?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        appointment.reason.toLowerCase().includes(searchTerm.toLowerCase())
+        (patient?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (doctor?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (appointment.reason?.toLowerCase() || '').includes(searchTerm.toLowerCase())
       
       const matchesStatus = statusFilter === 'all' || appointment.status === statusFilter
       
@@ -94,35 +94,28 @@ export function AppointmentsTable({
     return filteredAppointments.slice(startIndex, startIndex + rowsPerPage)
   }, [filteredAppointments, page])
 
-  const totalPages = Math.ceil(filteredAppointments.length / rowsPerPage)
-
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'SCHEDULED':
-        return 'info'
-      case 'COMPLETED':
-        return 'success'
-      case 'CANCELLED':
-        return 'error'
-      case 'RESCHEDULED':
-        return 'warning'
-      default:
-        return 'default'
+      case 'SCHEDULED': return 'primary'
+      case 'COMPLETED': return 'success'
+      case 'CANCELLED': return 'error'
+      case 'RESCHEDULED': return 'warning'
+      default: return 'default'
     }
   }
 
   const getPatientName = (patientId: string) => {
-    const patient = patients.find(p => p.id === patientId)
+    const patient = patients.find(p => p?.id === patientId)
     return patient?.name || 'Unknown Patient'
   }
 
   const getDoctorName = (doctorId: string) => {
-    const doctor = doctors.find(d => d.id === doctorId)
+    const doctor = doctors.find(d => d?.id === doctorId)
     return doctor?.name || 'Unknown Doctor'
   }
 
-  const formatDateTime = (dateTime: string) => {
-    return new Date(dateTime).toLocaleString()
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setPage(newPage)
   }
 
   return (
@@ -132,14 +125,12 @@ export function AppointmentsTable({
       transition={{ duration: 0.3 }}
     >
       <Card>
-        <CardContent sx={{ p: 3 }}>
+        <CardContent>
           <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
             <TextField
               placeholder="Search appointments..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              size="small"
-              sx={{ minWidth: 250, flexGrow: 1 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -147,29 +138,32 @@ export function AppointmentsTable({
                   </InputAdornment>
                 ),
               }}
+              sx={{ minWidth: 300 }}
             />
-            <FormControl size="small" sx={{ minWidth: 120 }}>
+            
+            <FormControl sx={{ minWidth: 150 }}>
               <InputLabel>Status</InputLabel>
               <Select
                 value={statusFilter}
-                label="Status"
                 onChange={(e) => setStatusFilter(e.target.value)}
+                label="Status"
               >
-                <MenuItem value="all">All Status</MenuItem>
+                <MenuItem value="all">All</MenuItem>
                 <MenuItem value="SCHEDULED">Scheduled</MenuItem>
                 <MenuItem value="COMPLETED">Completed</MenuItem>
                 <MenuItem value="CANCELLED">Cancelled</MenuItem>
                 <MenuItem value="RESCHEDULED">Rescheduled</MenuItem>
               </Select>
             </FormControl>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
+
+            <FormControl sx={{ minWidth: 150 }}>
               <InputLabel>Date</InputLabel>
               <Select
                 value={dateFilter}
-                label="Date"
                 onChange={(e) => setDateFilter(e.target.value)}
+                label="Date"
               >
-                <MenuItem value="all">All Dates</MenuItem>
+                <MenuItem value="all">All</MenuItem>
                 <MenuItem value="today">Today</MenuItem>
                 <MenuItem value="upcoming">Upcoming</MenuItem>
                 <MenuItem value="past">Past</MenuItem>
@@ -177,111 +171,79 @@ export function AppointmentsTable({
             </FormControl>
           </Box>
 
-          <TableContainer component={Paper} elevation={0}>
+          <TableContainer component={Paper} variant="outlined">
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 600 }}>Patient</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Doctor</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Department</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Date & Time</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Reason</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
+                  <TableCell>Patient</TableCell>
+                  <TableCell>Doctor</TableCell>
+                  <TableCell>Department</TableCell>
+                  <TableCell>Date & Time</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Reason</TableCell>
+                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {paginatedAppointments.map((appointment) => (
-                  <TableRow
-                    key={appointment.id}
-                    hover
-                  >
+                  <TableRow key={appointment.id} hover>
                     <TableCell>
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                          {getPatientName(appointment.patientId)}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          ID: {appointment.patientId}
-                        </Typography>
-                      </Box>
+                      <Typography fontWeight={500}>
+                        {getPatientName(appointment.patientId)}
+                      </Typography>
                     </TableCell>
                     <TableCell>
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                          {getDoctorName(appointment.doctorId)}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          ID: {appointment.doctorId}
-                        </Typography>
-                      </Box>
+                      <Typography fontWeight={500}>
+                        {getDoctorName(appointment.doctorId)}
+                      </Typography>
                     </TableCell>
                     <TableCell>{appointment.department}</TableCell>
                     <TableCell>
-                      <Box>
-                        <Typography variant="body2">
-                          {formatDateTime(appointment.startAt)}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          to {formatDateTime(appointment.endAt)}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" noWrap sx={{ maxWidth: 200 }}>
-                        {appointment.reason}
-                      </Typography>
+                      {new Date(appointment.startAt).toLocaleString()}
                     </TableCell>
                     <TableCell>
                       <Chip
                         label={appointment.status}
-                        size="small"
                         color={getStatusColor(appointment.status) as any}
+                        size="small"
                       />
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Tooltip title="Edit">
-                          <IconButton
-                            size="small"
-                            onClick={() => onEdit(appointment)}
-                            color="info"
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                        {appointment.status === 'SCHEDULED' && (
-                          <>
-                            <Tooltip title="Reschedule">
-                              <IconButton
-                                size="small"
-                                onClick={() => onReschedule(appointment)}
-                                color="warning"
-                              >
-                                <CalendarIcon />
-                              </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Cancel">
-                              <IconButton
-                                size="small"
-                                onClick={() => onCancel(appointment.id)}
-                                color="error"
-                              >
-                                <CancelIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </>
-                        )}
-                        <Tooltip title="Delete">
-                          <IconButton
-                            size="small"
-                            onClick={() => onDelete(appointment.id)}
-                            color="error"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
+                    <TableCell>{appointment.reason}</TableCell>
+                    <TableCell align="right">
+                      <Tooltip title="Edit">
+                        <IconButton
+                          size="small"
+                          onClick={() => onEdit(appointment)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Reschedule">
+                        <IconButton
+                          size="small"
+                          onClick={() => onReschedule(appointment)}
+                        >
+                          <CalendarIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Cancel">
+                        <IconButton
+                          size="small"
+                          onClick={() => onCancel(appointment.id)}
+                          color="error"
+                        >
+                          <CancelIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton
+                          size="small"
+                          onClick={() => onDelete(appointment.id)}
+                          color="error"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -289,24 +251,14 @@ export function AppointmentsTable({
             </Table>
           </TableContainer>
 
-          {totalPages > 1 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={(_, newPage) => setPage(newPage)}
-                color="primary"
-              />
-            </Box>
-          )}
-
-          {filteredAppointments.length === 0 && (
-            <Box sx={{ textAlign: 'center', py: 4 }}>
-              <Typography color="text.secondary">
-                No appointments found matching your criteria
-              </Typography>
-            </Box>
-          )}
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <Pagination
+              count={Math.ceil(filteredAppointments.length / rowsPerPage)}
+              page={page}
+              onChange={handleChangePage}
+              color="primary"
+            />
+          </Box>
         </CardContent>
       </Card>
     </motion.div>

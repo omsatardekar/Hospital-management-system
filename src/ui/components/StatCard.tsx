@@ -1,4 +1,4 @@
-import { Card, CardContent, Box, Typography, alpha } from '@mui/material'
+import { Card, CardContent, Box, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 
@@ -12,6 +12,8 @@ interface StatCardProps {
   icon: ReactNode
   color: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info'
   delay?: number
+  onClick?: () => void
+  layoutId?: string
 }
 
 const colorMap = {
@@ -23,15 +25,22 @@ const colorMap = {
   info: { main: '#3b82f6', light: '#60a5fa', bg: 'rgba(59, 130, 246, 0.08)' },
 }
 
-export function StatCard({ title, value, change, icon, color, delay = 0 }: StatCardProps) {
+export function StatCard({ title, value, change, icon, color, delay = 0, onClick, layoutId }: StatCardProps) {
   const colors = colorMap[color]
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay, ease: 'easeOut' }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      layoutId={layoutId}
+      initial="initial"
+      animate="animate"
+      whileHover="hover"
+      variants={{
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0, transition: { duration: 0.4, delay, ease: 'easeOut' } },
+        hover: { y: -4, transition: { duration: 0.2 } },
+      }}
+      onClick={onClick}
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
       <Card
         sx={{
@@ -91,6 +100,10 @@ export function StatCard({ title, value, change, icon, color, delay = 0 }: StatC
               )}
             </Box>
             <Box
+              component={motion.div}
+              variants={{
+                hover: { scale: 1.15, rotate: 5, transition: { type: 'spring', stiffness: 300 } }
+              }}
               sx={{
                 width: 52,
                 height: 52,

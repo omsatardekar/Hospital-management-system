@@ -72,4 +72,3 @@ export function hasPermission(role: Role | null | undefined, permission: Permiss
   if (!role) return false
   return ROLE_PERMISSIONS[role]?.includes(permission) ?? false
 }
-
