@@ -24,6 +24,7 @@ const DoctorDashboard = lazy(() => import('../ui/pages/doctor/DoctorDashboard'))
 const DoctorPatientManagement = lazy(() => import('../ui/pages/doctor/DoctorPatientManagement'))
 const DoctorSchedule = lazy(() => import('../ui/pages/doctor/DoctorSchedule'))
 const DoctorPortfolio = lazy(() => import('../ui/pages/doctor/DoctorPortfolio'))
+const DoctorConsultation = lazy(() => import('../ui/pages/doctor/DoctorConsultation'))
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function AppRouter() {
@@ -86,6 +87,7 @@ export function AppRouter() {
               <Route path="/doctor/appointments" element={<DoctorPatientManagement />} />
               <Route path="/doctor/schedule" element={<DoctorSchedule />} />
               <Route path="/doctor/portfolio" element={<DoctorPortfolio />} />
+              <Route path="/doctor/consultation" element={<DoctorConsultation />} />
             </Route>
             {/* ─────────────────────────────────────────────────────────── */}
           </Route>
