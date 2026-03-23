@@ -8,10 +8,11 @@ export type NavItem = {
   permission: Permission
 }
 
-export const ADMIN_NAV_ITEMS: NavItem[] = [
+export const NAV_ITEMS: NavItem[] = [
   { key: 'dashboard', label: 'Dashboard', to: '/dashboard', icon: 'dashboard', permission: 'dashboard:view' },
   { key: 'patients', label: 'Patients', to: '/patients', icon: 'patients', permission: 'patients:read' },
   { key: 'doctors', label: 'Doctors', to: '/doctors', icon: 'doctors', permission: 'doctors:read' },
+  // { key: 'appointments', label: 'Appointments', to: '/appointments', icon: 'appointments', permission: 'appointments:read' },
   { key: 'billing', label: 'Billing', to: '/billing', icon: 'billing', permission: 'billing:read' },
   { key: 'pharmacy', label: 'Pharmacy', to: '/pharmacy', icon: 'pharmacy', permission: 'pharmacy:read' },
   { key: 'laboratory', label: 'Laboratory', to: '/laboratory', icon: 'lab', permission: 'lab:read' },
@@ -21,14 +22,3 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
   { key: 'settings', label: 'Settings', to: '/settings', icon: 'settings', permission: 'settings:read' },
 ]
 
-export const DOCTOR_NAV_ITEMS: NavItem[] = [
-  { key: 'dashboard', label: 'Dashboard', to: '/doctor/dashboard', icon: 'dashboard', permission: 'dashboard:view' },
-  { key: 'appointments', label: 'Appointments', to: '/doctor/appointments', icon: 'appointments', permission: 'appointments:read' },
-  { key: 'schedule', label: 'Schedule', to: '/doctor/schedule', icon: 'appointments', permission: 'appointments:read' },
-  { key: 'profile', label: 'Profile', to: '/doctor/portfolio', icon: 'doctors', permission: 'doctors:read' },
-]
-
-export const PHARMACIST_NAV_ITEMS: NavItem[] = []
-
-// Default to generic items or admin items
-export const NAV_ITEMS = ADMIN_NAV_ITEMS

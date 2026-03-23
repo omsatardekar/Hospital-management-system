@@ -1,134 +1,339 @@
-import { Box, Typography, TextField, Button, IconButton, InputAdornment } from '@mui/material'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Visibility, VisibilityOff, Google } from '@mui/icons-material'
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
-import toast from 'react-hot-toast'
+import { Box, Card, CardContent, TextField, Button, Typography, IconButton, InputAdornment, Select, MenuItem } from '@mui/material'
+import { Visibility, VisibilityOff, Google, Facebook, Login as LoginIcon } from '@mui/icons-material'
+import { motion } from 'framer-motion'
 import { useAppDispatch } from '../app/hooks'
 import { login } from '../features/auth/authSlice'
+import toast from 'react-hot-toast'
 
-const LoginPage = () => {
-  const navigate = useNavigate()
+const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({
-    email: 'doctor@hms.com',
-    password: 'doctor123',
-  })
+  const [language, setLanguage] = useState('en')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword)
   }
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    
+    const targetEmail = email || 'admin@hospital.com'
+    const targetPassword = password || 'admin123'
+
     setIsLoading(true)
     
-    // Determine role based on email for demo purposes
-    let role: 'ADMIN' | 'DOCTOR' | 'PHARMACY' = 'DOCTOR'
-    if (formData.email.includes('admin')) role = 'ADMIN'
-    if (formData.email.includes('pharmacy')) role = 'PHARMACY'
-
     try {
-      const res = await dispatch(login({ email: formData.email, password: formData.password, role }))
-      if (login.fulfilled.match(res)) {
-         toast.success(`Welcome back, ${role.toLowerCase()}!`)
-         navigate(role === 'DOCTOR' ? '/doctor/dashboard' : '/dashboard')
+      // Dispatch the async thunk and wait for it to complete
+      const resultAction = await dispatch(login({
+        email: targetEmail,
+        password: targetPassword,
+        role: 'ADMIN',
+      }))
+
+      if (login.fulfilled.match(resultAction)) {
+        toast.success('Welcome back!')
+        navigate('/', { replace: true })
       } else {
-         toast.error('Invalid credentials')
+        const errorMsg = resultAction.error?.message || 'Invalid credentials'
+        toast.error(errorMsg)
       }
-    } catch (error) {
-       toast.error('Login failed')
+    } catch (err) {
+      toast.error('An unexpected error occurred')
     } finally {
-       setIsLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const handleGoogleLogin = () => {
-    setIsLoading(true)
-    setTimeout(() => {
-      toast.success('Google login successful!')
-      navigate('/doctor/dashboard')
-      setIsLoading(false)
-    }, 1500)
+  const handleFreeLogin = () => {
+    setEmail('admin@hospital.com')
+    setPassword('admin123')
+    handleLogin()
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.8, staggerChildren: 0.2 } },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  const handleSocialLogin = (provider: string) => {
+    toast(`${provider} login coming soon!`, { icon: '🔜' })
   }
 
   return (
-    <Box
-      sx={{
-        width: '100vw',
-        height: '100vh',
-        position: 'relative',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-        overflow: 'hidden'
-      }}
-    >
-      <Box sx={{ position: 'absolute', width: '100%', height: '100%', overflow: 'hidden', zIndex: 2 }}>
-        <motion.div
-          style={{ position: 'absolute', width: 300, height: 300, borderRadius: '50%', background: 'rgba(14, 165, 233, 0.1)', top: '10%', left: '10%' }}
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          style={{ position: 'absolute', width: 200, height: 200, borderRadius: '50%', background: 'rgba(13, 148, 136, 0.08)', bottom: '15%', right: '15%' }}
-          animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </Box>
-
-      <Box sx={{ position: 'relative', zIndex: 3, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 2 }}>
-        <motion.div variants={containerVariants} initial="hidden" animate="visible" style={{ width: '100%', maxWidth: 450 }}>
-          <motion.div variants={itemVariants}>
-            <Box sx={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', borderRadius: 6, border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', padding: 5, width: '100%' }}>
-              <Box sx={{ textAlign: 'center', marginBottom: 4 }}>
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}>
-                  <Box sx={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, #0ea5e9 0%, #0d9488 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '3px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 10px 20px rgba(14, 165, 233, 0.3)' }}>
-                    <LocalHospitalIcon sx={{ color: 'white', fontSize: 40 }} />
-                  </Box>
-                </motion.div>
-                <Typography variant="h4" sx={{ color: 'white', fontWeight: 800, marginBottom: 1, letterSpacing: '-0.02em' }}>HMS Clinical</Typography>
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '0.95rem' }}>Secure Portal for Healthcare Professionals</Typography>
-              </Box>
-
-              <form onSubmit={handleLogin}>
-                <motion.div variants={itemVariants}>
-                  <TextField fullWidth label="Email Address" type="email" value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)} required sx={{ marginBottom: 2.5, '& .MuiOutlinedInput-root': { backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 3, color: 'white', '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' }, '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' }, '&.Mui-focused fieldset': { borderColor: '#0ea5e9' } }, '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.5)' } }} />
-                </motion.div>
-                <motion.div variants={itemVariants}>
-                  <TextField fullWidth label="Password" type={showPassword ? 'text' : 'password'} value={formData.password} onChange={(e) => handleInputChange('password', e.target.value)} required InputProps={{ endAdornment: ( <InputAdornment position="end"> <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}> {showPassword ? <VisibilityOff /> : <Visibility />} </IconButton> </InputAdornment> ) }} sx={{ marginBottom: 4, '& .MuiOutlinedInput-root': { backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 3, color: 'white', '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' }, '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' }, '&.Mui-focused fieldset': { borderColor: '#0ea5e9' } }, '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.5)' } }} />
-                </motion.div>
-                <motion.div variants={itemVariants}>
-                  <Button type="submit" fullWidth variant="contained" disabled={isLoading} sx={{ py: 1.8, background: 'linear-gradient(90deg, #0ea5e9 0%, #0d9488 100%)', boxShadow: '0 4px 15px rgba(14, 165, 233, 0.4)', color: 'white', fontWeight: 700, fontSize: '1rem', borderRadius: 3, textTransform: 'none', '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 8px 25px rgba(14, 165, 233, 0.5)' } }}> {isLoading ? 'Authenticating...' : 'Sign In to Dashboard'} </Button>
-                </motion.div>
-              </form>
-
-              <Box sx={{ display: 'flex', alignItems: 'center', margin: '30px 0' }}>
-                <Box sx={{ flex: 1, height: 1, background: 'rgba(255, 255, 255, 0.1)' }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.4)', px: 2, fontSize: '0.8rem', fontWeight: 600 }}>TRUSTED ACCESS</Typography>
-                <Box sx={{ flex: 1, height: 1, background: 'rgba(255, 255, 255, 0.1)' }} />
-              </Box>
-
-              <motion.div variants={itemVariants}>
-                <Button fullWidth variant="outlined" onClick={handleGoogleLogin} disabled={isLoading} startIcon={<Google />} sx={{ py: 1.5, borderColor: 'rgba(255, 255, 255, 0.1)', color: 'white', borderRadius: 3, textTransform: 'none', '&:hover': { background: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.3)' } }}> Continue with Google </Button>
-              </motion.div>
-              
-              <Box sx={{ mt: 3, textAlign: 'center' }}>
-                 <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.4)' }}> Demo Access: doctor@hms.com / doctor123 </Typography>
-              </Box>
+    <Box sx={{ height: '100vh', display: 'flex', overflow: 'hidden' }}>
+      {/* Left Section - Purple Background with Medical Theme */}
+      <Box
+        sx={{
+          width: { xs: '0%', md: '50%' },
+          background: 'linear-gradient(135deg, #0891b2 0%, #0e7490 100%)',
+          display: { xs: 'none', md: 'flex' },
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'relative',
+          padding: 4,
+          color: 'white'
+        }}
+      >
+        {/* Medical Icon at Top Left */}
+        <Box sx={{ position: 'absolute', top: 24, left: 24 }}>
+          <motion.div
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          >
+            <Box sx={{ 
+              width: 48, 
+              height: 48, 
+              backgroundColor: 'rgba(255, 255, 255, 0.2)', 
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Box sx={{ fontSize: 24 }}>🏥</Box>
             </Box>
           </motion.div>
+        </Box>
+
+        {/* Medical Illustration */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <Box sx={{ 
+            width: 280, 
+            height: 280, 
+            backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 4,
+            position: 'relative'
+          }}>
+            {/* Stethoscope SVG */}
+            <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M100 40C90 40 80 50 80 60C80 70 90 80 100 80C110 80 120 70 120 60C120 50 110 40 100 40Z" fill="white" fillOpacity="0.8"/>
+              <path d="M80 60C80 60 60 80 60 120C60 160 80 180 100 180C120 180 140 160 140 120C140 80 120 60 120 60" stroke="white" strokeWidth="8" strokeLinecap="round"/>
+              <circle cx="60" cy="120" r="15" fill="white" fillOpacity="0.8"/>
+              <circle cx="140" cy="120" r="15" fill="white" fillOpacity="0.8"/>
+            </svg>
+            {/* Floating medical icons */}
+            <Box sx={{ position: 'absolute', top: -20, right: 20, fontSize: 32 }}>💉</Box>
+            <Box sx={{ position: 'absolute', bottom: -10, left: 20, fontSize: 28 }}>💊</Box>
+          </Box>
+        </motion.div>
+
+        {/* Tagline */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'center', marginBottom: 2 }}>
+            MedFlow Hospital
+          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 500, textAlign: 'center', opacity: 0.9 }}>
+            Advanced Healthcare Management System
+          </Typography>
+        </motion.div>
+      </Box>
+
+      {/* Right Section - White Form */}
+      <Box
+        sx={{
+          width: { xs: '100%', md: '50%' },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'background.default',
+          padding: 4,
+          position: 'relative'
+        }}
+      >
+        {/* Language Selector */}
+        <Box sx={{ position: 'absolute', top: 24, right: 24 }}>
+          <Select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            size="small"
+            sx={{ minWidth: 120 }}
+          >
+            <MenuItem value="en">English (US)</MenuItem>
+            <MenuItem value="hi">हिंदी</MenuItem>
+            <MenuItem value="es">Español</MenuItem>
+          </Select>
+        </Box>
+
+        {/* Login Form Card */}
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          style={{ width: '100%', maxWidth: 400 }}
+        >
+          <Card sx={{ boxShadow: 'none', border: 'none', background: 'transparent' }}>
+            <CardContent sx={{ padding: 0 }}>
+              <Typography variant="h4" sx={{ fontWeight: 700, marginBottom: 1, textAlign: 'center', color: 'text.primary' }}>
+                Welcome Back
+              </Typography>
+              <Typography variant="body2" sx={{ marginBottom: 4, textAlign: 'center', color: 'text.secondary' }}>
+                Sign in to access your dashboard
+              </Typography>
+
+              {/* Social Login Buttons */}
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<Google />}
+                onClick={() => handleSocialLogin('Google')}
+                sx={{ 
+                  marginBottom: 2, 
+                  textTransform: 'none',
+                  borderColor: 'divider',
+                  color: 'text.primary',
+                  borderRadius: 3,
+                  py: 1.5,
+                  '&:hover': { borderColor: 'primary.main', backgroundColor: 'action.hover' }
+                }}
+              >
+                Sign in with Google
+              </Button>
+
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<Facebook />}
+                onClick={() => handleSocialLogin('Facebook')}
+                sx={{ 
+                  marginBottom: 2, 
+                  textTransform: 'none',
+                  borderColor: 'divider',
+                  color: 'text.primary',
+                  borderRadius: 3,
+                  py: 1.5,
+                  '&:hover': { borderColor: 'primary.main', backgroundColor: 'action.hover' }
+                }}
+              >
+                Sign in with Facebook
+              </Button>
+
+              {/* OR Separator */}
+              <Box sx={{ display: 'flex', alignItems: 'center', margin: '24px 0' }}>
+                <Box sx={{ flex: 1, height: 1, backgroundColor: 'divider' }} />
+                <Typography sx={{ margin: '0 16px', color: 'text.secondary', fontSize: 14 }}>
+                  OR
+                </Typography>
+                <Box sx={{ flex: 1, height: 1, backgroundColor: 'divider' }} />
+              </Box>
+
+              {/* Form Fields */}
+              <form onSubmit={handleLogin}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  variant="outlined"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  sx={{ 
+                    marginBottom: 2,
+                    '& .MuiOutlinedInput-root': { borderRadius: 3 }
+                  }}
+                  placeholder="admin@hospital.com"
+                />
+
+                <TextField
+                  fullWidth
+                  label="Password"
+                  variant="outlined"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePassword} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{ 
+                    marginBottom: 3,
+                    '& .MuiOutlinedInput-root': { borderRadius: 3 }
+                  }}
+                  placeholder="••••••••"
+                />
+
+                {/* Sign In Button */}
+                <Button
+                  fullWidth
+                  variant="contained"
+                  type="submit"
+                  disabled={isLoading}
+                  sx={{ 
+                    background: 'linear-gradient(135deg, #0891b2 0%, #0e7490 100%)',
+                    padding: '14px',
+                    textTransform: 'none',
+                    fontSize: 16,
+                    fontWeight: 600,
+                    borderRadius: 3,
+                    boxShadow: '0 4px 14px rgba(8, 145, 178, 0.4)',
+                    marginBottom: 2,
+                    '&:hover': { 
+                      background: 'linear-gradient(135deg, #0e7490 0%, #155e75 100%)',
+                      boxShadow: '0 6px 20px rgba(8, 145, 178, 0.5)',
+                    },
+                    '&:disabled': {
+                      background: 'action.disabledBackground',
+                    }
+                  }}
+                >
+                  {isLoading ? 'Signing in...' : 'Sign In'}
+                </Button>
+
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={handleFreeLogin}
+                  disabled={isLoading}
+                  startIcon={<LoginIcon />}
+                  sx={{ 
+                    padding: '12px',
+                    textTransform: 'none',
+                    fontSize: 15,
+                    fontWeight: 500,
+                    borderRadius: 3,
+                    borderWidth: 2,
+                    '&:hover': {
+                      borderWidth: 2,
+                    }
+                  }}
+                >
+                  Free Login (Demo Access)
+                </Button>
+              </form>
+
+              {/* Demo Credentials Hint */}
+              <Box sx={{ 
+                marginTop: 3, 
+                padding: 2, 
+                backgroundColor: 'action.hover',
+                borderRadius: 3,
+                border: '1px dashed',
+                borderColor: 'divider',
+              }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center' }}>
+                  <strong>Demo:</strong> Any email & password will work
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
         </motion.div>
       </Box>
     </Box>
