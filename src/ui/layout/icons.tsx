@@ -9,6 +9,8 @@ import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSetting
 import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded'
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded'
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded'
+import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded'
+import VerifiedUserRoundedIcon from '@mui/icons-material/VerifiedUserRounded'
 
 export function navIcon(key: string) {
   switch (key) {
@@ -34,6 +36,10 @@ export function navIcon(key: string) {
       return <ReceiptLongRoundedIcon fontSize="small" />
     case 'settings':
       return <SettingsRoundedIcon fontSize="small" />
+    case 'schedule':
+      return <CalendarMonthRoundedIcon fontSize="small" />
+    case 'portfolio':
+      return <VerifiedUserRoundedIcon fontSize="small" />
     default:
       return <DashboardRoundedIcon fontSize="small" />
   }

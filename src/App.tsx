@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { AppRouter } from './routes/AppRouter'
 import { useAppDispatch, useAppSelector } from './app/hooks'
 import { bootstrap } from './features/app/appSlice'
-import { login } from './features/auth/authSlice'
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -10,7 +9,8 @@ export default function App() {
   const bootStatus = useAppSelector((s) => s.app.bootStatus)
 
   useEffect(() => {
-    // Auto-login with admin credentials for demo
+    // Auto-login disabled for multi-role demo
+    /*
     if (!token) {
       dispatch(login({
         email: 'admin@hospital.com',
@@ -18,6 +18,7 @@ export default function App() {
         role: 'ADMIN',
       }))
     }
+    */
     
     if (token && bootStatus === 'idle') {
       dispatch(bootstrap())

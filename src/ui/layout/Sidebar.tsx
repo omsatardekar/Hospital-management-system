@@ -14,19 +14,7 @@ export function Sidebar() {
   const role = useAppSelector((s) => s.auth.user?.role ?? null)
   const location = useLocation()
 
-  const visibleItems = NAV_ITEMS.filter((i) => {
-    const permOk = hasPermission(role, i.permission)
-    if (!permOk) return false
-    
-    // Explicitly hide admin-dashboard for Doctors
-    if (role === 'DOCTOR' && i.key === 'admin-dashboard') return false
-    
-    // Explicitly hide doctor items for Admin (unless they want to see them?)
-    // The user said "dont change admin panel", but for a cleaner experience:
-    if (role === 'ADMIN' && i.key.startsWith('doctor-')) return false
-    
-    return true
-  })
+  const visibleItems = NAV_ITEMS.filter((i) => hasPermission(role, i.permission))
 
   return (
     <Box

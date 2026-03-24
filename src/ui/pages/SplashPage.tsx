@@ -5,18 +5,16 @@ import { useNavigate } from 'react-router-dom'
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import { useAppSelector } from '../../app/hooks'
 
 export default function SplashPage() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
-  const role = useAppSelector((s) => s.auth.user?.role)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false)
-      // Route doctor users to their own dashboard; others to admin dashboard
-      navigate(role === 'DOCTOR' ? '/doctor/dashboard' : '/dashboard')
+      // Navigate to index route where RoleRedirect handles logic
+      navigate('/')
     }, 3000)
 
     return () => clearTimeout(timer)

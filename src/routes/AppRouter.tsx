@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from './ProtectedRoute'
 import { AppShell } from '../ui/layout/AppShell'
 import { PageLoader } from '../ui/shared/PageLoader'
+import { useAppSelector } from '../app/hooks'
 
 const SplashPage = lazy(() => import('../ui/pages/SplashPage'))
 const LoginPage = lazy(() => import('../ui/pages/LoginPage'))
@@ -19,13 +20,22 @@ const AuditLogsPage = lazy(() => import('../ui/pages/AuditLogsPage'))
 const SettingsPage = lazy(() => import('../ui/pages/SettingsPage'))
 const ForbiddenPage = lazy(() => import('../ui/pages/ForbiddenPage'))
 
-// ── Doctor pages (Omkar) ──────────────────────────────────────────────────────
+// Doctor Pages
 const DoctorDashboard = lazy(() => import('../ui/pages/doctor/DoctorDashboard'))
 const DoctorPatientManagement = lazy(() => import('../ui/pages/doctor/DoctorPatientManagement'))
 const DoctorSchedule = lazy(() => import('../ui/pages/doctor/DoctorSchedule'))
-const DoctorPortfolio = lazy(() => import('../ui/pages/doctor/DoctorPortfolio'))
-const DoctorConsultation = lazy(() => import('../ui/pages/doctor/DoctorConsultation'))
-// ─────────────────────────────────────────────────────────────────────────────
+const DoctorProfile = lazy(() => import('../ui/pages/doctor/DoctorProfile'))
+
+// Pharmacist Pages
+const PharmacistDashboard = lazy(() => import('../ui/pages/pharmacist/PharmacistDashboard'))
+
+function RoleRedirect() {
+  const role = useAppSelector((s) => s.auth.user?.role)
+  
+  if (role === 'DOCTOR') return <Navigate to="/doctor/dashboard" replace />
+  if (role === 'PHARMACIST') return <Navigate to="/pharmacist/dashboard" replace />
+  return <Navigate to="/dashboard" replace />
+}
 
 export function AppRouter() {
   return (
@@ -37,7 +47,7 @@ export function AppRouter() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppShell />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route index element={<RoleRedirect />} />
 
             <Route element={<ProtectedRoute permission="dashboard:view" />}>
               <Route path="/dashboard" element={<DashboardPage />} />
@@ -81,15 +91,25 @@ export function AppRouter() {
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
 
-            {/* ── Doctor Routes (Omkar) ──────────────────────────────────── */}
-            <Route element={<ProtectedRoute permission="dashboard:view" />}>
+            {/* Doctor Routes (Omkar) */}
+            <Route element={<ProtectedRoute permission="doctor:dashboard" />}>
               <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-              <Route path="/doctor/appointments" element={<DoctorPatientManagement />} />
-              <Route path="/doctor/schedule" element={<DoctorSchedule />} />
-              <Route path="/doctor/portfolio" element={<DoctorPortfolio />} />
-              <Route path="/doctor/consultation" element={<DoctorConsultation />} />
             </Route>
-            {/* ─────────────────────────────────────────────────────────── */}
+            <Route element={<ProtectedRoute permission="appointments:read" />}>
+              <Route path="/doctor/appointments" element={<DoctorPatientManagement />} />
+            </Route>
+            <Route element={<ProtectedRoute permission="doctor:schedule" />}>
+              <Route path="/doctor/schedule" element={<DoctorSchedule />} />
+            </Route>
+            <Route element={<ProtectedRoute permission="doctor:profile" />}>
+              <Route path="/doctor/portfolio" element={<DoctorProfile />} />
+            </Route>
+
+            {/* Pharmacist Routes */}
+            <Route element={<ProtectedRoute permission="pharmacist:dashboard" />}>
+              <Route path="/pharmacist/dashboard" element={<PharmacistDashboard />} />
+            </Route>
+
           </Route>
         </Route>
 
@@ -98,3 +118,4 @@ export function AppRouter() {
     </Suspense>
   )
 }
+

@@ -13,7 +13,7 @@ export default function ForbiddenPage() {
           <Typography variant="body2" sx={{ opacity: 0.75, mt: 0.75 }}>
             Your role does not have permission to access this module.
           </Typography>
-          <Button sx={{ mt: 2 }} variant="contained" onClick={() => navigate('/dashboard')}>
+          <Button sx={{ mt: 2 }} variant="contained" onClick={() => navigate('/')}>
             Back to Dashboard
           </Button>
         </CardContent>
