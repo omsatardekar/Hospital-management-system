@@ -24,6 +24,9 @@ export type Permission =
   | 'doctor:schedule'
   | 'doctor:profile'
   | 'pharmacist:dashboard'
+  | 'pharmacist:orders'
+  | 'pharmacist:inventory'
+  | 'pharmacist:profile'
 
 export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
   ADMIN: [
@@ -43,7 +46,9 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     'doctor:dashboard', 'appointments:read', 'appointments:write',
     'doctor:schedule', 'doctor:profile'
   ],
-  PHARMACIST: ['pharmacist:dashboard']
+  PHARMACIST: [
+      'pharmacist:dashboard', 'pharmacist:orders', 'pharmacist:inventory', 'pharmacist:profile'
+  ]
 }
 
 export function hasPermission(role: Role | null | undefined, permission: Permission) {

@@ -28,6 +28,9 @@ const DoctorProfile = lazy(() => import('../ui/pages/doctor/DoctorProfile'))
 
 // Pharmacist Pages
 const PharmacistDashboard = lazy(() => import('../ui/pages/pharmacist/PharmacistDashboard'))
+const PharmacistOrders = lazy(() => import('../ui/pages/pharmacist/PharmacistOrders'))
+const PharmacistInventory = lazy(() => import('../ui/pages/pharmacist/PharmacistInventory'))
+const PharmacistProfile = lazy(() => import('../ui/pages/pharmacist/PharmacistProfile'))
 
 function RoleRedirect() {
   const role = useAppSelector((s) => s.auth.user?.role)
@@ -108,6 +111,15 @@ export function AppRouter() {
             {/* Pharmacist Routes */}
             <Route element={<ProtectedRoute permission="pharmacist:dashboard" />}>
               <Route path="/pharmacist/dashboard" element={<PharmacistDashboard />} />
+            </Route>
+            <Route element={<ProtectedRoute permission="pharmacist:orders" />}>
+              <Route path="/pharmacist/orders" element={<PharmacistOrders />} />
+            </Route>
+            <Route element={<ProtectedRoute permission="pharmacist:inventory" />}>
+              <Route path="/pharmacist/inventory" element={<PharmacistInventory />} />
+            </Route>
+            <Route element={<ProtectedRoute permission="pharmacist:profile" />}>
+              <Route path="/pharmacist/profile" element={<PharmacistProfile />} />
             </Route>
 
           </Route>

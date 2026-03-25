@@ -6,6 +6,7 @@ export type NavItem = {
   to: string
   icon: string
   permission: Permission
+  disabled?: boolean
 }
 
 export const NAV_ITEMS: NavItem[] = [
@@ -20,7 +21,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: 'reports', label: 'Reports', to: '/reports', icon: 'reports', permission: 'reports:read' },
   { key: 'auditLogs', label: 'Audit Logs', to: '/audit-logs', icon: 'audit', permission: 'audit:read' },
   { key: 'settings', label: 'Settings', to: '/settings', icon: 'settings', permission: 'settings:read' },
-  
+
   // Doctor Items (Omkar)
   { key: 'doctor-dashboard', label: 'Doctor Dashboard', to: '/doctor/dashboard', icon: 'dashboard', permission: 'doctor:dashboard' },
   { key: 'doctor-appointments', label: 'Appointments', to: '/doctor/appointments', icon: 'appointments', permission: 'appointments:read' },
@@ -28,6 +29,9 @@ export const NAV_ITEMS: NavItem[] = [
   { key: 'doctor-portfolio', label: 'Profile', to: '/doctor/portfolio', icon: 'portfolio', permission: 'doctor:profile' },
 
   // Pharmacist Items
-  { key: 'pharmacist-dashboard', label: 'Pharmacist Dashboard', to: '/pharmacist/dashboard', icon: 'dashboard', permission: 'pharmacist:dashboard' },
+  { key: 'pharmacist-dashboard', label: 'Dashboard', to: '/pharmacist/dashboard', icon: 'dashboard', permission: 'pharmacist:dashboard' },
+  { key: 'pharmacist-orders', label: 'Orders / Prescriptions', to: '/pharmacist/orders', icon: 'appointments', permission: 'pharmacist:orders' },
+  { key: 'pharmacist-inventory', label: 'Inventory', to: '/pharmacist/inventory', icon: 'lab', permission: 'pharmacist:inventory' },
+  { key: 'pharmacist-profile', label: 'Profile', to: '/pharmacist/profile', icon: 'portfolio', permission: 'pharmacist:profile' },
 ]
 

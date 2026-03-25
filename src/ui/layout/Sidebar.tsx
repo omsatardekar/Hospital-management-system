@@ -115,8 +115,8 @@ export function Sidebar() {
                   }}
                 >
                   <Box
-                    component={NavLink}
-                    to={item.to}
+                    component={item.disabled ? 'div' : NavLink}
+                    to={item.disabled ? undefined : item.to}
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
@@ -131,12 +131,18 @@ export function Sidebar() {
                       textDecoration: 'none',
                       border: active ? '2px solid #22d3ee' : '2px solid transparent',
                       minHeight: 40,
-                      cursor: 'pointer',
+                      cursor: item.disabled ? 'not-allowed' : 'pointer',
+                      opacity: item.disabled ? 0.4 : 1,
                       '&:hover': {
                         background: active ? '#ffffff' : 'rgba(255,255,255,0.25)',
                         color: active ? '#0891b2' : '#fff',
-                        transform: 'scale(1.1)',
+                        transform: item.disabled ? 'none' : 'scale(1.1)',
                       },
+                    }}
+                    onClick={(e: React.MouseEvent) => {
+                      if (item.disabled) {
+                        e.preventDefault()
+                      }
                     }}
                   >
                     <Box sx={{ color: 'inherit', display: 'flex', alignItems: 'center', fontSize: 20 }}>
