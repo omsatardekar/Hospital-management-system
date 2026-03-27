@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# Hospital Management System (HMS) 🏥
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive, modern, and professional **Hospital Management System** designed to streamline clinical workflows. This platform provides specialized dashboards for Doctors, Pharmacists, and Administrators, ensuring seamless patient care and operational efficiency.
 
-Currently, two official plugins are available:
+## 🚀 Key Modules
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 🩺 Doctor Panel (Clinical Hub)
+- **Patient Management**: Full access to patient history, medical records, and clinical observations.
+* **Appointment Tracking**: Real-time status updates (Pending, In Progress, Done).
+- **Prescription System**: Quick dispensation and electronic medicine logs.
+- **Professional Profile**: Verified identity and specialized credentials display.
 
-## React Compiler
+### 💊 Pharmacist Panel (Dispensary Command Center)
+- **Interactive Dashboard**: Real-time stats, order trends, and live queue feed.
+* **Advanced Inventory**: Full CRUD operations for medicines with stock health bars (Low/Critical warnings).
+- **Fulfillment flow**: Cohesive order-to-dispensation workflow.
+- **Professional Receipts**: One-click professional PDF receipt generation for patients using `jsPDF`.
+- **Operating Matrix**: Legally mandated operating hours and compliance tracking.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### ⚙️ Admin Panel
+- **Operational Oversight**: Full system monitoring and resource allocation.
+- **User Management**: Unified control for staff and dispensary nodes.
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend**: React 18 with TypeScript & Vite
+- **UI Framework**: Material UI (MUI) for a premium, consistent design
+- **State Management**: React Context & Hooks
+- **Visuals & Charts**: Recharts for real-time operational insights
+- **Animations**: Framer Motion for smooth UI transitions
+- **PDF Engine**: jsPDF for professional receipt generation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ⚙️ Setup & Installation
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+To run this project locally, follow these steps:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/omsatardekar/Hospital-management-system.git
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4. **Build for production**:
+   ```bash
+   npm run build
+   ```
+
+## 📄 License & Usage
+
+This project is built for educational and professional demonstration purposes. It follows a modular architecture, making it easy for students and developers to extend into a production-grade system.
+
+## 📧 Contact & Queries
+
+For any questions, improvements, or collaboration queries, feel free to reach out:
+
+**Omkar Satardekar**
+📫 Email: [omkarsatardekar4002@gmail.com](mailto:omkarsatardekar4002@gmail.com)
+
+---
+*Built with ❤️ for better healthcare management.*
