@@ -33,15 +33,23 @@ A comprehensive, modern, and professional **Hospital Management System** designe
 ## Demo Screenshots
 
 ## Pharmacist
+
 <img width="1902" height="877" alt="image" src="https://github.com/user-attachments/assets/735af419-274a-4b6a-a38b-69261ea235ea" />
+
 <img width="1920" height="879" alt="image" src="https://github.com/user-attachments/assets/94896fd1-1797-4c14-9fd8-321d334d3af0" />
+
 <img width="1898" height="886" alt="image" src="https://github.com/user-attachments/assets/ffb45168-c050-484f-ac6f-19f981ad2ce5" />
+
 <img width="1895" height="873" alt="image" src="https://github.com/user-attachments/assets/488d71af-41fe-4f37-b5f3-d4052f4e6c49" />
 
 ## Doctor
+
 <img width="1895" height="878" alt="image" src="https://github.com/user-attachments/assets/8f0cbf31-2f11-4fa8-9c11-7ee3fbf85420" />
+
 <img width="1899" height="881" alt="image" src="https://github.com/user-attachments/assets/70a38402-0f36-48d0-90dc-c7ab188cfa81" />
+
 <img width="1890" height="869" alt="image" src="https://github.com/user-attachments/assets/2b3f1514-0dc0-4cd2-99ae-6703a46c213f" />
+
 <img width="1878" height="879" alt="image" src="https://github.com/user-attachments/assets/442ff5ec-6351-4196-a2e2-b9df9d4496d6" />
 
 
